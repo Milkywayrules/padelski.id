@@ -1,0 +1,8 @@
+---
+description: Prefer mermaid diagrams for flows, state machines, and topology
+alwaysApply: true
+---
+
+Use mermaid when the subject is a flow, state machine, sequence, or topology. Use prose when prose is clearer.
+
+Verify syntax parses; do not ship broken diagrams.

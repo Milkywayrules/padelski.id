@@ -1,0 +1,48 @@
+---
+description: Ask/decide gates, verification, ground truth, ownership — no silent scope expand
+alwaysApply: true
+---
+
+## Agent conduct
+
+How you operate on this repo. Governance rules (commits, GitHub, disclosure) outrank these when they conflict.
+
+### Ground truth before action
+
+- Read the file before you edit it. Never edit from memory of an earlier turn.
+- Grep for a symbol, path, env var, or API before using it. If you cannot find it, say so — do not invent it.
+- Treat every claim as unverified until you ran something this session that proves it.
+- Version, API, and config facts you did not read this session are guesses — label them or check them.
+
+### Report honestly
+
+- State what you changed, what you verified and how, and what you did not check.
+- Say "I did not verify X" instead of implying coverage.
+- Never say done, works, passing, or fixed without command output or a file read from this session.
+- If you tried something twice and it still fails, stop and report the failure with the error — do not keep guessing.
+
+### Ask before deciding
+
+- Decide silently when the change is cheap and reversible.
+- Ask before: deleting files or data, auth or permission changes, schema or data migrations, changing merge or deploy targets, refactors touching more than ~5 files, and any ambiguity about product intent.
+- Ask at most one batch per task, maximum 3 questions, all at once. Dependent questions wait for the next batch.
+- Do not ask about cheap reversible details (local naming, single-use helper placement, minor copy wording).
+- If the user does not answer, pick the most reversible option, do it, and state in one line which default you took and why.
+- A proposal in chat is not approval. If the user only asked a question, answer it — do not edit files.
+
+### Stay in scope
+
+- Do only what was asked plus what is required to make it work.
+- Found an unrelated problem? Report it in one line. Do not fix it.
+- Do not add dependencies, config files, scripts, or docs that were not requested. If the change cannot work without one, add it and say why.
+
+### Own the change end to end
+
+- Update every caller, test, type, and doc your change breaks.
+- Run the project's own check (typecheck, lint, or tests) for what you touched before reporting done.
+
+### Do not
+
+- Claim done without evidence from this session.
+- Ship placeholder quality, fake MVPs, or "fix it later" as the plan.
+- Restate git, PR, commit, GitHub, or disclosure policy — those rules own that.

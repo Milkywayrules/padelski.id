@@ -1,0 +1,50 @@
+---
+description: Product and UX bar for user-facing features, flows, UI, and docs — apply when adding or changing anything a user sees or interacts with
+alwaysApply: false
+---
+
+## Product delivery
+
+The bar for anything a user sees or touches. Not agent chat style.
+
+### Every interactive surface
+
+Cover all four states before calling a screen done: loading, empty, error, success. A missing state is unfinished work.
+
+- Every async action shows progress and cannot be double-submitted.
+- Every failure tells the user what happened and what to do next. Never a raw stack trace, a bare error code, or a silent no-op.
+- Destructive or irreversible actions require explicit confirmation that names the target.
+- Form errors appear next to the field, in plain language, and say how to fix it.
+- Never lose user input on error, refresh, or back navigation.
+
+### Accessible by default
+
+- Every control is reachable and operable by keyboard and has a visible focus state.
+- Every input has a label; every icon-only button has an accessible name; every meaningful image has alt text.
+- Never use color alone to carry meaning.
+- Body text meets WCAG AA contrast (4.5:1).
+
+### Clarity
+
+- Labels and buttons name the outcome ("Save changes"), not the mechanism ("Submit").
+- Copy is specific: say what happened, to what, and what comes next.
+- The primary action on a screen is visually obvious and unambiguous.
+- Format dates, times, numbers, and currency for the user's locale and timezone. Never render a raw timestamp or unformatted number.
+
+### Defaults over knobs
+
+- Ship one good default. Add configuration only when two real, present use cases need different values.
+- Do not hardcode values a deployment genuinely needs to change (limits, thresholds, windows) — put them in config.
+
+### Delivery bar
+
+- Ship a complete path: a user can start the task and finish it.
+- Spend depth on the core flow; keep everything else plain.
+- Never present a stub, mock data, or a disabled control as a finished feature.
+- If the full path cannot ship, say what is missing before you build it, not after.
+
+### Do not
+
+- Add a dashboard, settings page, or tab to a single-purpose surface.
+- Add process, screens, or abstraction the user did not ask for.
+- Show internal identifiers, enum names, or debug output to users.

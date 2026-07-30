@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "batch-grill-me": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/in-progress/batch-grill-me/SKILL.md",
+      "computedHash": "f448831b8f04518b1527408f1d5024384ad5f543bdbaac6fabb7aa053ad60489"
+    },
     "dio-dont-trust-your-memory-check-the-docs-first": {
       "source": "Milkywayrules/dioilham-skills",
       "sourceType": "github",
@@ -84,6 +90,24 @@
       "sourceType": "github",
       "skillPath": "skills/dio-what-our-current-work-status/SKILL.md",
       "computedHash": "6e152ddeaadb250938f3a077cf0163718f6d2aeb0455d59b80ba54a6b929709b"
+    },
+    "domain-modeling": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/domain-modeling/SKILL.md",
+      "computedHash": "363cb0f53b0b431e7c00086ad1f823500b7e1b70b5616ee969c979f0934e9e6e"
+    },
+    "grill-with-docs": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/grill-with-docs/SKILL.md",
+      "computedHash": "9c460cbd94fd3c63cdef967dbdb6e66ca687103cdc380cd37834e4d10b738f78"
+    },
+    "grilling": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/productivity/grilling/SKILL.md",
+      "computedHash": "368d3dd7251247c69f3656d93dc83c8f1577792eacac2111f1e7981db2ece49b"
     },
     "verasic-agent-disclosure": {
       "source": "Milkywayrules/verasic-skills",

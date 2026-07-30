@@ -1,0 +1,51 @@
+---
+description: Smallest change, locality, safety, errors, tests for behavior changes
+alwaysApply: true
+---
+
+## Coding principles
+
+Apply when writing or changing code, configs, migrations, and tests.
+
+### Simplicity
+
+- Write the smallest correct solution. No abstraction until a second real caller exists.
+- Keep related logic together; do not spread one behavior across modules.
+
+### Locality
+
+- Keep helpers, types, constants, and components in the file that uses them until a second file needs them.
+- Do not create a new file, module, or folder for single-use code.
+
+### Non-negotiable safety
+
+- Validate and type every input crossing a trust boundary: HTTP body, query params, env, webhooks, file uploads, third-party responses.
+- Never hardcode secrets, tokens, or credentials. Read them from env or the secret store.
+- Never build SQL, shell commands, or HTML by concatenating untrusted input — use parameters, safe APIs, or escaping.
+- Never log secrets, tokens, passwords, or full personal data.
+- Enforce authorization on the server for every protected action. A hidden UI control is not access control.
+
+### Errors and failure
+
+- Handle the error or let it propagate with context. Never catch and continue silently.
+- Every external call — network, database, filesystem — needs a timeout and a defined behavior on failure.
+- Log at the point of failure with enough context to debug it without a reproduction.
+- Error messages name what failed and the identifying value; keep internals out of user-facing text.
+
+### Order of attention within one change
+
+Make it correct, then make it safe and observable, then simplify. This orders attention inside one change — not permission to ship the first step alone.
+
+### Hygiene
+
+- Add or update tests for behavior you changed; at minimum, cover the failure path you introduced.
+- Leave touched code cleaner than you found it, within the scope you were given.
+- One canonical place per fact, constant, or type — no drifting copies.
+- Delete commented-out code and dead branches; git remembers.
+
+### Do not
+
+- Refactor code outside the requested change.
+- Add a dependency without saying why in your summary.
+- Suppress type errors, lint rules, or failing tests to make a check pass.
+- Leave TODOs, stubs, or placeholder returns in code you report as done.
