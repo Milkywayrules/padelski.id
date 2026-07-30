@@ -1,0 +1,19 @@
+# Cursor Agent CLI (`agent`) — optimized for Cursor IDE + Composer daily driver.
+# Skills live in .agents/skills/ (BMAD v6 cursor installer path). Hooks use
+# .cursor/hooks.json (Cursor native dialect; structurally matches copilot-settings-json).
+# Token usage is not exposed by Cursor CLI yet — usage_parser stays "none".
+name = "cursor"
+binary = "agent"
+prompt_template = "LOAD the FULL .agents/skills/{skill}/SKILL.md, read its entire contents and follow its directions exactly, using subagents as needed: {args}"
+bypass_args = ["--force", "--trust"]
+model_flag = "--model"
+usage_parser = "none"
+stop_without_result_nudges = 5
+first_run_note = "run `agent` once in the project with `--trust` and accept any first-run dialogs before `bmad-loop run` — spawned sessions can't answer them. Pin Composer via policy.toml model (e.g. composer-2.5)."
+skill_tree = ".agents/skills"
+seed_files = [".cursor/hooks.json"]
+
+[hooks]
+dialect = "copilot-settings-json"
+config_path = ".cursor/hooks.json"
+events = { stop = "Stop", sessionStart = "SessionStart", sessionEnd = "SessionEnd" }
