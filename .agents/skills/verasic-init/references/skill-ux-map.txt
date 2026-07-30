@@ -1,0 +1,10 @@
+# skill-name|cursor-relpath|kind  (relpath relative to repo-root .cursor/)
+# kind: rule | agent  (commands retired v0.2.0 — orchestration in SKILL.md)
+verasic-bugbot|agents/verasic-bugbot-reviewer.md|agent
+verasic-secbot|agents/verasic-secbot-reviewer.md|agent
+verasic-git-commits-audit|agents/verasic-git-commit-auditor.md|agent
+verasic-git-commits-convention|rules/verasic-git-commits-convention.mdc|rule
+verasic-agent-disclosure|rules/verasic-agent-disclosure.mdc|rule
+verasic-github-cli-init|rules/verasic-github-cli-env.mdc|rule
+verasic-github-governance|agents/verasic-github-governor.md|agent
+verasic-github-governance|rules/verasic-github-governance.mdc|rule

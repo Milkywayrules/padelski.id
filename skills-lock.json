@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "skills": {
+    "dio-dont-trust-your-memory-check-the-docs-first": {
+      "source": "Milkywayrules/dioilham-skills",
+      "sourceType": "github",
+      "skillPath": "skills/dio-dont-trust-your-memory-check-the-docs-first/SKILL.md",
+      "computedHash": "a6ac194b1f3366f9f9d3f691c229ad3096823fe3e7c79fe5f1b9394d88e7c96d"
+    },
+    "dio-i-changed-my-mind": {
+      "source": "Milkywayrules/dioilham-skills",
+      "sourceType": "github",
+      "skillPath": "skills/dio-i-changed-my-mind/SKILL.md",
+      "computedHash": "9c304e98f69d61c619ea70fd256a74b6157869a54f479ff6434511a76be41a2c"
+    },
+    "dio-no-new-options": {
+      "source": "Milkywayrules/dioilham-skills",
+      "sourceType": "github",
+      "skillPath": "skills/dio-no-new-options/SKILL.md",
+      "computedHash": "1a26ef14f88d846c346b00d63f8866b47d7146d1571313b173d4d983509866ea"
+    },
+    "dio-ok-i-go-with-your-recommendations": {
+      "source": "Milkywayrules/dioilham-skills",
+      "sourceType": "github",
+      "skillPath": "skills/dio-ok-i-go-with-your-recommendations/SKILL.md",
+      "computedHash": "4a30676ab91375f0c85a030e0b47b5da3529e0d3bf0feb7983b51048f68ae1ca"
+    },
+    "dio-one-breath-recap": {
+      "source": "Milkywayrules/dioilham-skills",
+      "sourceType": "github",
+      "skillPath": "skills/dio-one-breath-recap/SKILL.md",
+      "computedHash": "58538d78f82a23d9c19b476bad5c349e2f55aebe97770c3eb8cec5b6944c9270"
+    },
+    "dio-park-this-for-later-with-enough-context": {
+      "source": "Milkywayrules/dioilham-skills",
+      "sourceType": "github",
+      "skillPath": "skills/dio-park-this-for-later-with-enough-context/SKILL.md",
+      "computedHash": "77231c30617b6c4b6dcca0f0b210049ec9fd675ffe7acff79f1ab55cbcf7474d"
+    },
+    "dio-refine-prompt": {
+      "source": "Milkywayrules/dioilham-skills",
+      "sourceType": "github",
+      "skillPath": "skills/dio-refine-prompt/SKILL.md",
+      "computedHash": "19e4001f2b6e7a3c187e7b334e94f36292a88b38b1d89ed78a83dcb4d768ac21"
+    },
+    "dio-stop-exploring-pick-one": {
+      "source": "Milkywayrules/dioilham-skills",
+      "sourceType": "github",
+      "skillPath": "skills/dio-stop-exploring-pick-one/SKILL.md",
+      "computedHash": "50f4c5c7e797de877d1be5f9054de32e8610ddba038744909d498d5782bdccf0"
+    },
+    "dio-summarize-only-the-deltas-since-last-checkpoint": {
+      "source": "Milkywayrules/dioilham-skills",
+      "sourceType": "github",
+      "skillPath": "skills/dio-summarize-only-the-deltas-since-last-checkpoint/SKILL.md",
+      "computedHash": "24832349f0a0b5736d48ee7f90182f66f89f677f7ed9a0fbf0f13feb2de5047b"
+    },
+    "dio-what-actionable-items-we-have": {
+      "source": "Milkywayrules/dioilham-skills",
+      "sourceType": "github",
+      "skillPath": "skills/dio-what-actionable-items-we-have/SKILL.md",
+      "computedHash": "3044e1b59c9989328cef16f56497c619cb29d6a8d9b113f29962f8d01a8eca0e"
+    },
+    "dio-what-assumptions-are-we-running-on": {
+      "source": "Milkywayrules/dioilham-skills",
+      "sourceType": "github",
+      "skillPath": "skills/dio-what-assumptions-are-we-running-on/SKILL.md",
+      "computedHash": "4e35bbe9967a232b0f7440efe2023e9e97d83f70179d0cbacbc297f7e28de5cf"
+    },
+    "dio-what-did-we-decide-and-why": {
+      "source": "Milkywayrules/dioilham-skills",
+      "sourceType": "github",
+      "skillPath": "skills/dio-what-did-we-decide-and-why/SKILL.md",
+      "computedHash": "81c4b162730aca1626362d4a9e0aa153f7276af68cf6e2482c5db44d319f82e9"
+    },
+    "dio-what-is-still-open-or-unresolved": {
+      "source": "Milkywayrules/dioilham-skills",
+      "sourceType": "github",
+      "skillPath": "skills/dio-what-is-still-open-or-unresolved/SKILL.md",
+      "computedHash": "462e6621086f0f0912f02ce2e9da0659db9e40c1a22cca97c4977cb98e95ccde"
+    },
+    "dio-what-our-current-work-status": {
+      "source": "Milkywayrules/dioilham-skills",
+      "sourceType": "github",
+      "skillPath": "skills/dio-what-our-current-work-status/SKILL.md",
+      "computedHash": "6e152ddeaadb250938f3a077cf0163718f6d2aeb0455d59b80ba54a6b929709b"
+    },
+    "verasic-agent-disclosure": {
+      "source": "Milkywayrules/verasic-skills",
+      "sourceType": "github",
+      "skillPath": "skills/verasic-agent-disclosure/SKILL.md",
+      "computedHash": "432d0beee597a726cd9c089b2ccc8b680936f13a5942b69c2e81c00effd57dba"
+    },
+    "verasic-bugbot": {
+      "source": "Milkywayrules/verasic-skills",
+      "sourceType": "github",
+      "skillPath": "skills/verasic-bugbot/SKILL.md",
+      "computedHash": "e68b534b6026e39faa73a6960a647ff03c8eefed5835c0551669744236d073c1"
+    },
+    "verasic-deep-research": {
+      "source": "Milkywayrules/verasic-skills",
+      "sourceType": "github",
+      "skillPath": "skills/verasic-deep-research/SKILL.md",
+      "computedHash": "5279b3677313b19cc2e0671f88c95698624e263afaf20748610a80523782cc3e"
+    },
+    "verasic-fusion": {
+      "source": "Milkywayrules/verasic-skills",
+      "sourceType": "github",
+      "skillPath": "skills/verasic-fusion/SKILL.md",
+      "computedHash": "0a274cdb78035bc82d25463147e69d081191d00b990c08b7f5df697d37c36187"
+    },
+    "verasic-git-commits-audit": {
+      "source": "Milkywayrules/verasic-skills",
+      "sourceType": "github",
+      "skillPath": "skills/verasic-git-commits-audit/SKILL.md",
+      "computedHash": "e77736bf3cbc63d76a46f9cebede32f1de7aea0c172901ecba75b75f6221df33"
+    },
+    "verasic-git-commits-convention": {
+      "source": "Milkywayrules/verasic-skills",
+      "sourceType": "github",
+      "skillPath": "skills/verasic-git-commits-convention/SKILL.md",
+      "computedHash": "0e92553a9413b4b9a617df4da72213a08f256a3c487fba99da8b8bcf7597d73d"
+    },
+    "verasic-github-cli-init": {
+      "source": "Milkywayrules/verasic-skills",
+      "sourceType": "github",
+      "skillPath": "skills/verasic-github-cli-init/SKILL.md",
+      "computedHash": "e6ac7927bb7d7fa6213b8fb212cef3f882d18173785411fb1b5465076b819a3e"
+    },
+    "verasic-github-governance": {
+      "source": "Milkywayrules/verasic-skills",
+      "sourceType": "github",
+      "skillPath": "skills/verasic-github-governance/SKILL.md",
+      "computedHash": "a75fc477b1629de4e79ca373de1037baa7d056c94599c2fc92e1edcf33191f1f"
+    },
+    "verasic-github-governance-init": {
+      "source": "Milkywayrules/verasic-skills",
+      "sourceType": "github",
+      "skillPath": "skills/verasic-github-governance-init/SKILL.md",
+      "computedHash": "e2497a2ac222fb51825a24e3e85e98244c6e2175b9ac1eaf65a60be955c52555"
+    },
+    "verasic-init": {
+      "source": "Milkywayrules/verasic-skills",
+      "sourceType": "github",
+      "skillPath": "skills/verasic-init/SKILL.md",
+      "computedHash": "769309591a69b5ac6f5c4c036db312345b96e6cefcfb0a01b76e04c9daa1019d"
+    },
+    "verasic-secbot": {
+      "source": "Milkywayrules/verasic-skills",
+      "sourceType": "github",
+      "skillPath": "skills/verasic-secbot/SKILL.md",
+      "computedHash": "c67da1607ced748fab41b05ed20857948274b1334e1ca7900f760a3e20e8c34a"
+    }
+  }
+}
