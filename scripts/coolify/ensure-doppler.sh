@@ -34,10 +34,9 @@ resolve_doppler() {
     return 0
   fi
 
-  # coolify-helper:1.0.14 — Alpine + docker/curl only (no bun). Bootstrap CLI once per deploy.
-  if command -v curl >/dev/null 2>&1; then
-    curl -sLf --retry 3 --proto '=https' 'https://cli.doppler.com/install.sh' | sh -s -- --install-path /usr/local/bin
-    if command -v doppler >/dev/null 2>&1; then
+  # coolify-helper:1.0.14 — Alpine + docker/curl only (no bun, no gnupg). Use apk repo per Doppler docs.
+  if command -v apk >/dev/null 2>&1; then
+    if bootstrap_doppler_alpine; then
       DOPPLER=(doppler)
       return 0
     fi
@@ -45,6 +44,31 @@ resolve_doppler() {
 
   echo "error: doppler CLI not found (install on host or provide bun for bunx doppler)" >&2
   exit 1
+}
+
+bootstrap_doppler_alpine() {
+  local key_path="/etc/apk/keys/cli@doppler-8004D9FF50437357.rsa.pub"
+  local repo_line="https://packages.doppler.com/public/cli/alpine/any-version/main"
+
+  if ! command -v doppler >/dev/null 2>&1; then
+    if command -v curl >/dev/null 2>&1; then
+      curl -fsSL --retry 3 --proto '=https' \
+        'https://packages.doppler.com/public/cli/rsa.8004D9FF50437357.key' \
+        -o "$key_path"
+    elif command -v wget >/dev/null 2>&1; then
+      wget -q -t3 'https://packages.doppler.com/public/cli/rsa.8004D9FF50437357.key' -O "$key_path"
+    else
+      return 1
+    fi
+
+    if ! grep -qF "$repo_line" /etc/apk/repositories 2>/dev/null; then
+      echo "$repo_line" >>/etc/apk/repositories
+    fi
+
+    apk add --no-cache doppler
+  fi
+
+  command -v doppler >/dev/null 2>&1
 }
 
 export_doppler_cmd() {
