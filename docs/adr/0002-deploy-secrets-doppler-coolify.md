@@ -130,6 +130,7 @@ Scripts: `doppler:setup`, `doppler:validate`, `doppler:clear` (wipe config for r
 
 - Next.js builds currently depend on interim build-time `NEXT_PUBLIC_*` (see Interim deviation); remove when `/v1/config` lands.
 - Compose `environment:` must list every Doppler key each container needs — updating `packages/env/src/manifest.ts` requires updating compose.
+- Do not use `${VAR:?message}` or empty `${VAR:-}` in compose — validation belongs in `doppler:validate` and t3-env, not Docker Compose fallbacks (Coolify misreads them at build time).
 - Coolify custom build and start commands required (verified feasible on v4.1.2; confirm on VPS in 0.5).
 - Postgres and Redis are internal-only (no host port publish) in deploy compose.
 - Local dev: `doppler run --config dev_personal -- bun dev` (or equivalent).
