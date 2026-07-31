@@ -1,6 +1,8 @@
 pre-commit:
   parallel: true
   commands:
+    governance-pre-commit:
+      run: bash .github/verasic-governance/hooks/pre-commit
     biome:
       glob: "*.{js,ts,tsx,json,jsonc}"
       run: bunx biome check --write {staged_files}
@@ -9,6 +11,8 @@ pre-commit:
 
 pre-push:
   commands:
+    governance-pre-push:
+      run: bash .github/verasic-governance/hooks/pre-push {1}
     test:
       run: bun run test
 
