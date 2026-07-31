@@ -4,12 +4,14 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT"
 
-for cmd in doppler docker; do
-  if ! command -v "$cmd" >/dev/null 2>&1; then
-    echo "error: required command not found: $cmd" >&2
-    exit 1
-  fi
-done
+# shellcheck source=scripts/coolify/ensure-doppler.sh
+source "$ROOT/scripts/coolify/ensure-doppler.sh"
 
-doppler run -- bun run doppler:validate
-exec doppler run -- docker compose up -d --wait --remove-orphans "$@"
+if ! command -v docker >/dev/null 2>&1; then
+  echo "error: required command not found: docker" >&2
+  exit 1
+fi
+
+resolve_doppler
+maybe_validate_doppler_config "$ROOT"
+exec "${DOPPLER[@]}" run -- docker compose up -d --wait --remove-orphans "$@"

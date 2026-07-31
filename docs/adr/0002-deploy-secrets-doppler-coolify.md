@@ -46,7 +46,7 @@ Implemented as `scripts/coolify/up.sh`. Image build uses `scripts/coolify/build.
 | Piece | Behavior |
 | --- | --- |
 | **Coolify** | v4.1.2 · Docker Compose build pack · custom **build** via `bash scripts/coolify/build.sh --pull` · custom **start** via `bash scripts/coolify/up.sh -d` |
-| **Doppler CLI** | On VPS host · fetches at build and deploy/restart |
+| **Doppler CLI** | Host `doppler` or `bunx doppler` in Coolify helper (`scripts/coolify/ensure-doppler.sh`) · fetches at build and deploy/restart |
 | **GHA** | CI via Doppler↔GitHub sync for tests · deploy webhook/trigger only |
 | **Fallback volume** | Skipped — Doppler down + restart = fail until recovered |
 | **Smoke** | `bash scripts/coolify/smoke.sh` after up (health, config, web root) |
