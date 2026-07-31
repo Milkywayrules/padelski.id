@@ -1,12 +1,10 @@
-import { spawnSync } from "node:child_process";
+import { spawnDoppler } from "./doppler-cli";
 
 const DEFAULT_PROJECT = "padelski-id";
 const DEFAULT_CONFIG = "dev";
 
 function readLinked(key: "project" | "config"): string | null {
-  const result = spawnSync("doppler", ["configure", "get", key, "--plain"], {
-    encoding: "utf8",
-  });
+  const result = spawnDoppler(["configure", "get", key, "--plain"]);
   if (result.status !== 0) {
     return null;
   }

@@ -49,9 +49,9 @@ Implemented as `scripts/coolify/up.sh`. Image build uses `scripts/coolify/build.
 | **Doppler CLI** | Host `doppler` or `bunx doppler` in Coolify helper (`scripts/coolify/ensure-doppler.sh`) · fetches at build and deploy/restart |
 | **GHA** | CI via Doppler↔GitHub sync for tests · deploy webhook/trigger only |
 | **Fallback volume** | Skipped — Doppler down + restart = fail until recovered |
-| **Smoke** | `bash scripts/coolify/smoke.sh` after up (health, config, web root) |
+| **Smoke** | Chained at end of `scripts/coolify/up.sh` (health, config, web root) |
 
-**Phase 0.5 checklist:** Doppler CLI on host · Preserve Repository + correct project directory · `t3-env` validates after inject · `build.sh` then `up.sh` then `smoke.sh` on VPS.
+**Phase 0.5 checklist:** Doppler CLI on host · Preserve Repository + correct project directory · `t3-env` validates after inject · `build.sh` then `up.sh` on VPS (smoke runs at end of up).
 
 ## Environment matrix
 
@@ -131,6 +131,7 @@ Scripts: `doppler:setup`, `doppler:validate`, `doppler:clear` (wipe config for r
 - Next.js builds currently depend on interim build-time `NEXT_PUBLIC_*` (see Interim deviation); remove when `/v1/config` lands.
 - Compose `environment:` must list every Doppler key each container needs — updating `packages/env/src/manifest.ts` requires updating compose.
 - Do not use `${VAR:?message}` or empty `${VAR:-}` in compose — validation belongs in `doppler:validate` and t3-env, not Docker Compose fallbacks (Coolify misreads them at build time).
-- Coolify custom build and start commands required (verified feasible on v4.1.2; confirm on VPS in 0.5).
+- Coolify custom build and start commands required (verified feasible on v4.1.2; confirm on VPS in 0.5). Start: `bash scripts/coolify/up.sh` (includes `-d`, `--wait`, smoke).
+- App ports bind `127.0.0.1` only — Coolify proxy reaches services on loopback; not public `0.0.0.0`.
 - Postgres and Redis are internal-only (no host port publish) in deploy compose.
 - Local dev: `doppler run --config dev_personal -- bun dev` (or equivalent).

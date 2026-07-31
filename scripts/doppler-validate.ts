@@ -5,17 +5,24 @@
  *
  * Target: linked config from `doppler setup`, overridable via DOPPLER_PROJECT / DOPPLER_CONFIG.
  */
-import { spawnSync } from "node:child_process";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 
 import {
   DOPPLER_CONFIG_TO_APP_ENV,
+  DOPPLER_DEPLOY_KEYS,
   DOPPLER_MIRROR_PAIRS,
+  DOPPLER_RUNTIME_KEYS,
   type DopplerConfigSlug,
   forbiddenKeysForConfig,
   requiredKeysForConfig,
 } from "@padelski/env/manifest";
 
+import { spawnDoppler } from "./doppler-cli";
 import { resolveDopplerTarget } from "./doppler-target";
+
+const ROOT = join(import.meta.dir, "..");
+const COMPOSE_PATH = join(ROOT, "docker-compose.yml");
 
 const { project: PROJECT, config } = resolveDopplerTarget();
 
@@ -27,22 +34,54 @@ if (!(config in DOPPLER_CONFIG_TO_APP_ENV)) {
 const dopplerConfig = config as DopplerConfigSlug;
 
 function getSecretPlain(key: string): string | null {
-  const result = spawnSync(
-    "doppler",
-    ["secrets", "get", key, "--plain", "-p", PROJECT, "-c", dopplerConfig],
-    { encoding: "utf8" },
-  );
+  const result = spawnDoppler([
+    "secrets",
+    "get",
+    key,
+    "--plain",
+    "-p",
+    PROJECT,
+    "-c",
+    dopplerConfig,
+  ]);
   if (result.status !== 0) {
     return null;
   }
   return result.stdout.trim();
 }
 
-const result = spawnSync(
-  "doppler",
-  ["secrets", "--only-names", "--json", "-p", PROJECT, "-c", dopplerConfig],
-  { encoding: "utf8" },
-);
+function assertComposePassthrough(): boolean {
+  let ok = true;
+  const compose = readFileSync(COMPOSE_PATH, "utf8");
+
+  for (const key of DOPPLER_RUNTIME_KEYS) {
+    if (!compose.includes(`\${${key}}`)) {
+      console.error(
+        `docker-compose.yml missing Doppler passthrough for ${key} (Pattern A Option 2)`,
+      );
+      ok = false;
+    }
+  }
+
+  for (const key of DOPPLER_DEPLOY_KEYS) {
+    if (!compose.includes(`\${${key}}`)) {
+      console.error(`docker-compose.yml missing passthrough for deploy key ${key}`);
+      ok = false;
+    }
+  }
+
+  return ok;
+}
+
+const result = spawnDoppler([
+  "secrets",
+  "--only-names",
+  "--json",
+  "-p",
+  PROJECT,
+  "-c",
+  dopplerConfig,
+]);
 
 if (result.status !== 0) {
   console.error(result.stderr || "doppler secrets failed — run bun run doppler:setup");
@@ -55,6 +94,10 @@ const forbidden = forbiddenKeysForConfig(dopplerConfig);
 const expectedAppEnv = DOPPLER_CONFIG_TO_APP_ENV[dopplerConfig];
 
 let failed = false;
+
+if (!assertComposePassthrough()) {
+  failed = true;
+}
 
 for (const key of required) {
   if (!present.has(key)) {
@@ -88,7 +131,7 @@ for (const [left, right] of DOPPLER_MIRROR_PAIRS) {
   const rightValue = getSecretPlain(right);
   if (leftValue && rightValue && leftValue !== rightValue) {
     console.error(
-      `mirror mismatch in Doppler ${dopplerConfig}: ${left} (${leftValue}) != ${right} (${rightValue})`,
+      `mirror mismatch in Doppler ${dopplerConfig}: ${left} != ${right} (values redacted)`,
     );
     failed = true;
   }
