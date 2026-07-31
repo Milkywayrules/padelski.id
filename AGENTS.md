@@ -1,6 +1,7 @@
 # AGENTS
 
 <!-- verasic-governance:start -->
+
 ## GitHub agent harness
 
 - Load `GH_TOKEN` before any `gh` mutation: `source .cursor/skills/verasic-github-cli-init/scripts/load-gh-env.sh` (or `.agents/skills/` equivalent).
@@ -16,4 +17,9 @@ Soft enforcement (hooks + CI culture + doctor) is the default on private Free pl
 Required CI status check name: **`ci`**.
 
 Full spec: install **verasic-github-governance** from [verasic-skills](https://github.com/Milkywayrules/verasic-skills) (`skills/verasic-github-governance/SKILL.md`).
+
 <!-- verasic-governance:end -->
+
+## Verasic Fusion (default config)
+
+fusion. composer, grok, claude opus-5-medium, gpt sol, gemini 3.6 flash.
