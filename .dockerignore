@@ -23,3 +23,7 @@ playwright-report
 test-results
 lefthook.yml
 .husky
+*.tsbuildinfo
+apps/api/dist
+apps/web/.next
+.vscode

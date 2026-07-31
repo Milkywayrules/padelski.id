@@ -1,4 +1,5 @@
-FROM oven/bun:1.3-alpine AS base
+# syntax=docker/dockerfile:1
+FROM oven/bun:1.3.14-alpine AS base
 WORKDIR /app
 
 FROM base AS deps
@@ -15,12 +16,14 @@ COPY packages/env/package.json ./packages/env/
 COPY packages/ui/package.json ./packages/ui/
 COPY packages/ws-protocol/package.json ./packages/ws-protocol/
 # Skip root "prepare" (lefthook/git hooks) — git is absent in Alpine.
-RUN bun install --frozen-lockfile --ignore-scripts
+RUN --mount=type=cache,target=/root/.bun/install/cache \
+    bun install --frozen-lockfile --ignore-scripts
 
 FROM base AS builder
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-RUN rm -rf apps/*/node_modules packages/*/node_modules && bun install --frozen-lockfile --ignore-scripts
+RUN rm -rf apps/*/node_modules packages/*/node_modules && \
+    bun install --frozen-lockfile --ignore-scripts
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 # Interim: public URLs cross Docker build boundary until /v1/config client bootstrap (ADR-0002).
@@ -40,6 +43,8 @@ WORKDIR /app
 COPY --from=builder --chown=bun:bun /app/apps/web/.next/standalone ./
 COPY --from=builder --chown=bun:bun /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder --chown=bun:bun /app/apps/web/public ./apps/web/public
+# Writable mount point for runtime cache when compose uses read_only + tmpfs (Docker Next.js guide).
+RUN mkdir -p apps/web/.next/cache && chown -R bun:bun apps/web/.next
 USER bun
 EXPOSE 3000
-CMD ["bun", "run", "apps/web/server.js"]
+CMD ["bun", "apps/web/server.js"]
