@@ -11,3 +11,8 @@ pre-push:
   commands:
     test:
       run: bun run test
+
+commit-msg:
+  commands:
+    verasic:
+      run: bash .agents/skills/verasic-git-commits-convention/hooks/commit-msg {1}
