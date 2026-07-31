@@ -1,0 +1,493 @@
+# source-ledger.yaml — padelski.id Phase 0 Wave 3 (T1 codebase foundation readiness)
+# Generated: 2026-07-31 (UTC). Boundary: public-extended. Verify-before-cite applied.
+
+schema_version: "1.0"
+research_slug: codebase-foundation-readiness
+generated_at: "2026-07-31T01:20:00Z"
+source_boundary: public-extended
+domain_primary: internal-audit
+domain_secondary: [software-architecture, sports-product]
+
+meta:
+  question: "What must the monorepo prepare for agreed intents — packages layout, auth multi-tenant org stub, /app vs marketing, ws-protocol live score, CASL scoped RBAC, player profile indexes, BMAD handoff, Phase 0.5 scaffold gaps?"
+  depth: adversarial-deep
+  upstream_briefs:
+    - docs/research/competitor-gaps-usp/deep-research-brief.md
+    - docs/research/padel-domain-official-sources/deep-research-brief.md
+  orchestration: "degraded sequential single-context (Hunter→Practitioner→Skeptic→Arbiter roles in one thread)"
+  accessed_default: "2026-07-31"
+  repo_audit_date: "2026-07-31"
+  test_status: "bun run test — 10 tasks green (cached turbo)"
+
+sources:
+  - id: S1
+    url: CONTEXT.md
+    title: "CONTEXT.md — padelski.id ubiquitous language"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:18:00Z"
+    excerpt: "PlatformAdmin for abuse support; Org scope future club boundary; ScoreEvent append-only ephemeral log purged on archive."
+    excerpt_word_count: 18
+    author: padelski.id contributors
+    published_date: "2026-07-31"
+    accessed_date: "2026-07-31"
+    domain_tags: [internal-spec, product]
+    contradicts: []
+    notes: "Internal project vocabulary source of truth."
+    claim_ids: [C1, C5, C6]
+
+  - id: S2
+    url: docs/adr/0001-product-foundation.md
+    title: "ADR-0001 Product foundation"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:18:00Z"
+    excerpt: "Scoped RBAC PlatformAdmin OrgAdmin OrgMember Organizer Participant; CASL stub Phase 0.5; GitHub OAuth now; purge ScoreEvent on archived."
+    excerpt_word_count: 20
+    author: padelski.id contributors
+    published_date: "2026-07-31"
+    accessed_date: "2026-07-31"
+    domain_tags: [internal-spec, architecture]
+    contradicts: []
+    notes: "Accepted ADR Phase 0."
+    claim_ids: [C2, C5, C6, C8]
+
+  - id: S3
+    url: docs/adr/0003-domain-lifecycle-and-scoring.md
+    title: "ADR-0003 Domain lifecycle and scoring"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:18:00Z"
+    excerpt: "PlaySession setup active completed archived; Slot holder may score; Spectator read-only shareable link; ScoreEvent purged on archive."
+    excerpt_word_count: 18
+    author: padelski.id contributors
+    published_date: "2026-07-31"
+    accessed_date: "2026-07-31"
+    domain_tags: [internal-spec, domain]
+    contradicts: []
+    notes: "State machine authority."
+    claim_ids: [C3, C4, C7]
+
+  - id: S4
+    url: docs/tech-stack.md
+    title: "Tech stack snapshot — padelski.id"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:18:00Z"
+    excerpt: "Next App Router routes under /app; Elysia /v1; ws-protocol v1 stub; CASL stub Phase 0.5; Drizzle Postgres; Better Auth org stub."
+    excerpt_word_count: 22
+    author: padelski.id contributors
+    published_date: "2026-07-31"
+    accessed_date: "2026-07-31"
+    domain_tags: [internal-spec, stack]
+    contradicts: []
+    notes: "Locked stack for Phase 0.5 scaffold."
+    claim_ids: [C1, C4, C9]
+
+  - id: S5
+    url: docs/domain/play-session-model.md
+    title: "PlaySession domain model"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:18:00Z"
+    excerpt: "Index slots player_id; player_match_participation player_id finished_at DESC; player_stats rollup O(1) dashboard reads."
+    excerpt_word_count: 16
+    author: padelski.id contributors
+    published_date: "2026-07-31"
+    accessed_date: "2026-07-31"
+    domain_tags: [internal-spec, domain]
+    contradicts: []
+    notes: "Profile index strategy authority."
+    claim_ids: [C6, C10]
+
+  - id: S6
+    url: packages/domain/src/play-session.ts
+    title: "packages/domain PlaySession state machine"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:19:00Z"
+    excerpt: "setup ACTIVATE active; active COMPLETE completed; completed ARCHIVE archived REOPEN active; 24 domain tests pass."
+    excerpt_word_count: 16
+    author: padelski.id contributors
+    published_date: "2026-07-31"
+    accessed_date: "2026-07-31"
+    domain_tags: [internal-code]
+    contradicts: []
+    notes: "Implemented and tested."
+    claim_ids: [C1, C11]
+
+  - id: S7
+    url: packages/auth/src/abilities.ts
+    title: "packages/auth CASL abilities stub"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:19:00Z"
+    excerpt: "Roles member organizer admin; can read PlaySession; organizer manage PlaySession approve SlotClaim; admin manage Organization."
+    excerpt_word_count: 18
+    author: padelski.id contributors
+    published_date: "2026-07-31"
+    accessed_date: "2026-07-31"
+    domain_tags: [internal-code]
+    contradicts: [S2]
+    notes: "Flat roles — mismatch with ADR scoped RBAC intent; flagged in conflicts."
+    claim_ids: [C5, C12]
+
+  - id: S8
+    url: packages/ws-protocol/src/index.ts
+    title: "packages/ws-protocol v1 stub"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:19:00Z"
+    excerpt: "WS_PROTOCOL_VERSION v1; envelope v type payload; ping pong message types only."
+    excerpt_word_count: 14
+    author: padelski.id contributors
+    published_date: "2026-07-31"
+    accessed_date: "2026-07-31"
+    domain_tags: [internal-code]
+    contradicts: []
+    notes: "No score_event or spectator message types yet."
+    claim_ids: [C4, C13]
+
+  - id: S9
+    url: packages/db/src/schema/index.ts
+    title: "packages/db Drizzle schema stub"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:19:00Z"
+    excerpt: "users email name; organizations name slug; audit fields only — no PlaySession Slot Match tables."
+    excerpt_word_count: 16
+    author: padelski.id contributors
+    published_date: "2026-07-31"
+    accessed_date: "2026-07-31"
+    domain_tags: [internal-code]
+    contradicts: []
+    notes: "Domain persistence gap."
+    claim_ids: [C1, C6, C10]
+
+  - id: S10
+    url: https://www.better-auth.com/docs/plugins/organization
+    title: "Better Auth — Organization plugin"
+    tier: T1
+    fetch_status: verified
+    verified_at: "2026-07-31T01:19:30Z"
+    excerpt: "Organization plugin manages members and teams; requires migrate or generate schema; organizationClient on auth client."
+    excerpt_word_count: 16
+    author: Better Auth
+    published_date: "2026"
+    accessed_date: "2026-07-31"
+    domain_tags: [vendor-docs, auth]
+    contradicts: []
+    notes: "Supports org stub pattern in packages/auth."
+    claim_ids: [C8]
+
+  - id: S11
+    url: apps/web/src/app/page.tsx
+    title: "apps/web root page — Phase 0.5 scaffold"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:19:00Z"
+    excerpt: "Phase 0.5 scaffold client-first Next.js Mantine; lists PlaySession states — no /app route segment."
+    excerpt_word_count: 16
+    author: padelski.id contributors
+    published_date: "2026-07-31"
+    accessed_date: "2026-07-31"
+    domain_tags: [internal-code]
+    contradicts: []
+    notes: "Marketing vs app split not implemented."
+    claim_ids: [C9]
+
+  - id: S12
+    url: https://github.com/stalniy/casl/blob/master/packages/casl-ability/README.md
+    title: "@casl/ability README — defineAbilitiesFor with conditions"
+    tier: T1
+    fetch_status: verified
+    verified_at: "2026-07-31T01:19:45Z"
+    excerpt: "can manage BlogPost author user.id; conditions restrict users to matched records; incrementally adoptable."
+    excerpt_word_count: 14
+    author: S. Stalniy
+    published_date: null
+    accessed_date: "2026-07-31"
+    domain_tags: [vendor-docs, auth]
+    contradicts: []
+    notes: "Pattern for PlaySession-scoped Organizer rules."
+    claim_ids: [C5]
+
+  - id: S13
+    url: docs/bmad-handoff/PHASE-1-READY.md
+    title: "Phase 1 ready — BMAD handoff"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:18:00Z"
+    excerpt: "BMAD starts after Phase 0 spec and Phase 0.5 monorepo scaffold; G0.5 typecheck test Doppler Coolify smoke."
+    excerpt_word_count: 18
+    author: padelski.id contributors
+    published_date: "2026-07-31"
+    accessed_date: "2026-07-31"
+    domain_tags: [internal-spec, agents]
+    contradicts: []
+    notes: "Agent harness entry document."
+    claim_ids: [C7, C14]
+
+  - id: S14
+    url: docs/adr/0002-deploy-secrets-doppler-coolify.md
+    title: "ADR-0002 Deploy secrets Doppler Coolify"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:18:00Z"
+    excerpt: "Pattern A doppler run docker compose up; no NEXT_PUBLIC prod bake; Phase 0.5 Coolify VPS smoke checklist."
+    excerpt_word_count: 18
+    author: padelski.id contributors
+    published_date: "2026-07-31"
+    accessed_date: "2026-07-31"
+    domain_tags: [internal-spec, infra]
+    contradicts: []
+    notes: "G0.5 infra gates."
+    claim_ids: [C14, C15]
+
+  - id: S15
+    url: docs/research/padel-domain-official-sources/deep-research-brief.md
+    title: "Padel domain official sources research"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:18:00Z"
+    excerpt: "Two scoring engines Standard Match FIP-aligned and Rotation Social Americano Mexicano; defer ranking integration."
+    excerpt_word_count: 16
+    author: padelski.id contributors
+    published_date: "2026-07-31"
+    accessed_date: "2026-07-31"
+    domain_tags: [internal-research]
+    contradicts: []
+    notes: "Phase 1 scoring adapter input."
+    claim_ids: [C16]
+
+  - id: S16
+    url: docs/research/competitor-gaps-usp/deep-research-brief.md
+    title: "Competitor gaps USP research"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:18:00Z"
+    excerpt: "MVP wedge PlaySession ScoreEvent spectator link web-first; defer booking; SlotClaim after roster MVP."
+    excerpt_word_count: 16
+    author: padelski.id contributors
+    published_date: "2026-07-31"
+    accessed_date: "2026-07-31"
+    domain_tags: [internal-research]
+    contradicts: []
+    notes: "Validates G1 vertical slice order."
+    claim_ids: [C17]
+
+failed: []
+
+claims:
+  - id: C1
+    text: "Phase 0.5 packages layout exists but domain Drizzle tables and API wiring are missing."
+    source_ids: [S4, S6, S9]
+    confidence:
+      headline: 90
+      SQ: 95
+      EC: 88
+      CG: 92
+      CO: 85
+      VR: 92
+    verify_status: verified
+
+  - id: C2
+    text: "ADR-0001 locks recreational unofficial realm, GitHub OAuth first, ScoreEvent purge on archive, scoped RBAC vocabulary."
+    source_ids: [S2]
+    confidence:
+      headline: 98
+      SQ: 98
+      EC: 95
+      CG: 98
+      CO: 95
+      VR: 98
+    verify_status: verified
+
+  - id: C3
+    text: "ADR-0003 defines PlaySession lifecycle setup through archived and Spectator read-only scoring."
+    source_ids: [S3]
+    confidence:
+      headline: 98
+      SQ: 98
+      EC: 95
+      CG: 98
+      CO: 95
+      VR: 98
+    verify_status: verified
+
+  - id: C4
+    text: "ws-protocol v1 must expand beyond ping/pong with score and spectator message types before live scoring epic."
+    source_ids: [S3, S4, S8]
+    confidence:
+      headline: 91
+      SQ: 92
+      EC: 90
+      CG: 95
+      CO: 88
+      VR: 92
+    verify_status: verified
+
+  - id: C5
+    text: "CASL stub uses flat member/organizer/admin roles without PlaySession or Org conditions — must align to ADR scoped RBAC."
+    source_ids: [S2, S7, S12]
+    confidence:
+      headline: 86
+      SQ: 90
+      EC: 85
+      CG: 88
+      CO: 80
+      VR: 90
+    verify_status: verified
+
+  - id: C6
+    text: "Player profile index strategy is specified but not implemented in db schema."
+    source_ids: [S5, S9]
+    confidence:
+      headline: 84
+      SQ: 95
+      EC: 70
+      CG: 92
+      CO: 75
+      VR: 90
+    verify_status: verified
+
+  - id: C7
+    text: "BMAD handoff package PHASE-1-READY and bmad-loop policy exist; BMAD starts after G0.5 gates close."
+    source_ids: [S13]
+    confidence:
+      headline: 95
+      SQ: 98
+      EC: 90
+      CG: 95
+      CO: 92
+      VR: 95
+    verify_status: verified
+
+  - id: C8
+    text: "Better Auth organization plugin is wired in auth factory but requires DB migration and API mount for org stub."
+    source_ids: [S2, S4, S10]
+    confidence:
+      headline: 88
+      SQ: 90
+      EC: 85
+      CG: 90
+      CO: 82
+      VR: 88
+    verify_status: verified
+
+  - id: C9
+    text: "apps/web has no /app product route group — only root marketing-style placeholder page."
+    source_ids: [S4, S11]
+    confidence:
+      headline: 92
+      SQ: 95
+      EC: 90
+      CG: 95
+      CO: 88
+      VR: 92
+    verify_status: verified
+
+  - id: C10
+    text: "Recommended indexes include slots player_id partial, player_match_participation player_id finished_at, player_stats rollup."
+    source_ids: [S5]
+    confidence:
+      headline: 90
+      SQ: 95
+      EC: 70
+      CG: 95
+      CO: 80
+      VR: 90
+    verify_status: verified
+
+  - id: C11
+    text: "Domain state machine package is complete with passing Vitest suite."
+    source_ids: [S6]
+    confidence:
+      headline: 95
+      SQ: 98
+      EC: 90
+      CG: 98
+      CO: 85
+      VR: 95
+    verify_status: verified
+
+  - id: C12
+    text: "Current CASL admin role conflates PlatformAdmin and OrgAdmin scopes."
+    source_ids: [S2, S7]
+    confidence:
+      headline: 88
+      SQ: 95
+      EC: 85
+      CG: 90
+      CO: 80
+      VR: 92
+    verify_status: verified
+
+  - id: C13
+    text: "No API WebSocket handler exists yet for live score fanout."
+    source_ids: [S8, S4]
+    confidence:
+      headline: 85
+      SQ: 90
+      EC: 80
+      CG: 88
+      CO: 82
+      VR: 88
+    verify_status: verified
+
+  - id: C14
+    text: "G0.5 requires Doppler local and Coolify VPS smoke tests not verified in this research run."
+    source_ids: [S13, S14]
+    confidence:
+      headline: 75
+      SQ: 95
+      EC: 85
+      CG: 80
+      CO: 70
+      VR: 60
+    verify_status: verified
+
+  - id: C15
+    text: "Production must use runtime config not NEXT_PUBLIC env bake per ADR-0002."
+    source_ids: [S14]
+    confidence:
+      headline: 95
+      SQ: 98
+      EC: 90
+      CG: 95
+      CO: 90
+      VR: 95
+    verify_status: verified
+
+  - id: C16
+    text: "Scoring engines Standard Match and Rotation Social are Phase 1 adapter work not Phase 0.5."
+    source_ids: [S15]
+    confidence:
+      headline: 92
+      SQ: 95
+      EC: 88
+      CG: 92
+      CO: 85
+      VR: 90
+    verify_status: verified
+
+  - id: C17
+    text: "First BMAD vertical slice order PlaySession then ScoreEvent WS then SlotClaim then profile history matches competitor gap research."
+    source_ids: [S13, S16]
+    confidence:
+      headline: 88
+      SQ: 90
+      EC: 85
+      CG: 88
+      CO: 85
+      VR: 88
+    verify_status: verified
+
+contested:
+  - claim_id: C12
+    sides:
+      - source_ids: [S7]
+        interpretation: "admin role intended as temporary Platform+Org collapse"
+      - source_ids: [S2]
+        interpretation: "ADR requires distinct PlatformAdmin and OrgAdmin scopes"
+    resolution: "Expand CASL stub in Phase 0.5 to ADR vocabulary with conditions; do not ship Phase 1 with flat admin."

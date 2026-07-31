@@ -1,0 +1,30 @@
+{
+  "name": "@padelski/email",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "lint": "biome check .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@react-email/components": "^0.0.41",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "resend": "^4.5.1",
+    "zod": "^3.25.28"
+  },
+  "devDependencies": {
+    "@padelski/config": "workspace:*",
+    "@types/react": "^19.1.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  }
+}

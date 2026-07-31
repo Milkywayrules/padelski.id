@@ -1,0 +1,410 @@
+schema_version: "1.0"
+research_slug: padel-domain-official-sources
+generated_at: "2026-07-31T01:11:00Z"
+source_boundary: public-extended
+domain_primary: general
+domain_secondary: [sports-regulation]
+depth: adversarial-deep
+degraded_mode: "T1 sequential single-context (subagent); T2/T3 parallel dispatch not used"
+
+sources:
+  - id: S1
+    url: https://www.padelfip.com/wp-content/uploads/2025/12/FIP_Rules-of-Padel.pdf
+    title: "Rules of Padel — International Padel Federation (Review of application 01.01.2026)"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:05:00Z"
+    excerpt: "On the first point won 15 will be called… deuce… advantage… first pair to win 6 games… tie-break… best of three sets."
+    excerpt_word_count: 22
+    author: International Padel Federation
+    published_date: "2025-12-18"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports-regulation, scoring]
+    contradicts: []
+    notes: "Primary authority for padel match rules, scoring options, tie-break, and alternative formats."
+    claim_ids: [C1, C2, C3, C4, C5, C6, C7, C8, C9, C10]
+
+  - id: S2
+    url: https://www.padelfip.com/documents/
+    title: "Documents — Padel FIP"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:06:00Z"
+    excerpt: "SPORT / COMPETITIONS — RULES OF PADEL; PREMIER PADEL OFFICIAL RULEBOOK; OFFICIAL RULEBOOK CUPRA FIP TOUR."
+    excerpt_word_count: 18
+    author: International Padel Federation
+    published_date: null
+    accessed_date: "2026-07-31"
+    domain_tags: [sports-regulation]
+    contradicts: []
+    notes: "Index of official FIP and circuit rulebooks."
+    claim_ids: [C11]
+
+  - id: S3
+    url: https://www.padelfip.com/ranking-system-points-breakdown/
+    title: "Ranking System & Points Breakdown — Padel FIP"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:06:30Z"
+    excerpt: "The 22 best results achieved by players in the QATAR AIRWAYS PREMIER PADEL and CUPRA FIP TOUR tournaments will form the FIP Ranking 2026."
+    excerpt_word_count: 26
+    author: International Padel Federation
+    published_date: "2026"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports-regulation, ranking]
+    contradicts: []
+    notes: "Official FIP ranking methodology page; not applicable to recreational club scoring."
+    claim_ids: [C12, C13]
+
+  - id: S4
+    url: https://www.padelfip.com/wp-content/uploads/2025/01/FIP_Premier_Padel_announce_new_2025_FIP_ranking_points-and-tournament_criteria_FINAL_EN.pdf
+    title: "FIP and Premier Padel Announce New 2025 FIP Ranking Points and Tournament Criteria"
+    tier: T0
+    fetch_status: verified
+    verified_at: "2026-07-31T01:07:00Z"
+    excerpt: "Winners of FIP Platinum tournaments will receive 300 FIP ranking points… FIP Gold 150… CUPRA FIP Finals 225."
+    excerpt_word_count: 20
+    author: International Padel Federation / Premier Padel
+    published_date: "2025-01"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports-regulation, ranking]
+    contradicts: []
+    notes: "Circuit-specific ranking point tables; PDF table layout partially garbled on fetch but headline figures verified."
+    claim_ids: [C12]
+
+  - id: S5
+    url: https://www.interpadelmedia.com/en/premier-padel-and-the-fip-present-the-2026-calendar-featuring-new-cities-and-a-new-scoring-system/
+    title: "Premier Padel and FIP present the 2026 calendar, featuring new cities and a new scoring system"
+    tier: T1
+    fetch_status: verified
+    verified_at: "2026-07-31T01:07:30Z"
+    excerpt: "The Star Point scoring system will be implemented in 2026… also applied to the CUPRA FIP Tour from 2026."
+    excerpt_word_count: 22
+    author: InterPadel Media / Premier Padel / FIP
+    published_date: "2025-12-18"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports-regulation, scoring]
+    contradicts: [S6]
+    notes: "Official-adjacent circuit announcement; confirms Star Point as 2026 default on Premier Padel and CUPRA FIP Tour."
+    claim_ids: [C14]
+
+  - id: S6
+    url: https://www.padel-magazine.co.uk/the-three-scoring-formats-recognized-by-the-International-Padel-Federation/
+    title: "The three scoring formats recognized by the International Federation of Padel"
+    tier: T2
+    fetch_status: verified
+    verified_at: "2026-07-31T01:08:00Z"
+    excerpt: "Each circuit, league or organizer remains free to choose the scoring format… provided that it is among those validated by the International Federation."
+    excerpt_word_count: 24
+    author: Padel Magazine
+    published_date: null
+    accessed_date: "2026-07-31"
+    domain_tags: [sports-regulation, scoring]
+    contradicts: [S5]
+    notes: "Secondary interpretation of FIP framework; useful for organizer-choice thesis but not primary law."
+    claim_ids: [C15]
+
+  - id: S7
+    url: https://padel.how/rules/official-fip-padel-rules/
+    title: "Official Padel Rules (FIP) — Full Text with Practical Commentary"
+    tier: T2
+    fetch_status: snippet-only
+    verified_at: "2026-07-31T01:08:30Z"
+    excerpt: "After deuce, a pair must win two consecutive points… unless a different scoring system has been agreed in advance."
+    excerpt_word_count: 18
+    author: padel.how
+    published_date: null
+    accessed_date: "2026-07-31"
+    domain_tags: [sports-regulation, scoring]
+    contradicts: []
+    notes: "Commentary site paraphrasing FIP; pre-match agreement language not verbatim in 2026 PDF Option blocks — use as interpretive support only."
+    claim_ids: [C16]
+
+  - id: S8
+    url: https://www.padelfast.com/formats/americano
+    title: "Padel Americano: Rules, Scoring & Format"
+    tier: T2
+    fetch_status: verified
+    verified_at: "2026-07-31T01:09:00Z"
+    excerpt: "Instead of 15, 30, 40 and game, you bank one point for every rally you win… usually 16, 24 or 32."
+    excerpt_word_count: 22
+    author: Padel Fast
+    published_date: null
+    accessed_date: "2026-07-31"
+    domain_tags: [recreational-formats]
+    contradicts: []
+    notes: "Not FIP-sanctioned; common recreational rotation format. No decrement scoring described."
+    claim_ids: [C17, C18]
+
+  - id: S9
+    url: https://www.padelfast.com/formats/mexicano
+    title: "Padel Mexicano: Rules, Scoring & How to Play"
+    tier: T2
+    fetch_status: verified
+    verified_at: "2026-07-31T01:09:15Z"
+    excerpt: "Every rally won gives one point to the winning team… pairings determined based on the current leaderboard."
+    excerpt_word_count: 18
+    author: Padel Fast
+    published_date: null
+    accessed_date: "2026-07-31"
+    domain_tags: [recreational-formats]
+    contradicts: []
+    notes: "Same +1 rally scoring as Americano; pairing logic differs. Not in FIP rulebook."
+    claim_ids: [C17, C19]
+
+  - id: S10
+    url: https://www.pbpi.or.id/id
+    title: "Perkumpulan Besar Padel Indonesia"
+    tier: T2
+    fetch_status: snippet-only
+    verified_at: "2026-07-31T01:09:30Z"
+    excerpt: "Perkumpulan Besar Padel Indonesia — membangun ekosistem padel nasional… sistem peringkat."
+    excerpt_word_count: 12
+    author: PBPI
+    published_date: null
+    accessed_date: "2026-07-31"
+    domain_tags: [national-federation, indonesia]
+    contradicts: []
+    notes: "National federation landing page only; no published scoring rulebook fetched. /en/about-us returned client-side error."
+    claim_ids: [C20]
+
+claims:
+  - id: C1
+    text: "Standard padel game scoring uses tennis-style point names 15, 30, 40, then game."
+    source_ids: [S1]
+    confidence:
+      headline: 95
+      SQ: 98
+      EC: 90
+      CG: 98
+      CO: 92
+      VR: 95
+    verify_status: verified
+
+  - id: C2
+    text: "FIP 2026 recognizes three deuce-resolution options: Advantage (Option 1), Star Point (Option 2), and Golden Point (Option 3)."
+    source_ids: [S1]
+    confidence:
+      headline: 95
+      SQ: 98
+      EC: 92
+      CG: 98
+      CO: 90
+      VR: 95
+    verify_status: verified
+
+  - id: C3
+    text: "Star Point caps deuce at two advantages; at deuce 3 a single Star Point decides the game, with receivers choosing side and holding positions."
+    source_ids: [S1, S5]
+    confidence:
+      headline: 92
+      SQ: 95
+      EC: 88
+      CG: 95
+      CO: 88
+      VR: 92
+    verify_status: verified
+
+  - id: C4
+    text: "Golden Point plays one deciding point at first deuce; receiving pair chooses side and cannot change positions."
+    source_ids: [S1]
+    confidence:
+      headline: 90
+      SQ: 95
+      EC: 85
+      CG: 92
+      CO: 88
+      VR: 90
+    verify_status: verified
+
+  - id: C5
+    text: "A set is won by the first pair to six games with at least a two-game margin; at 5–5 play continues to 7–5; at 6–6 a tie-break is applied."
+    source_ids: [S1]
+    confidence:
+      headline: 95
+      SQ: 98
+      EC: 90
+      CG: 98
+      CO: 92
+      VR: 95
+    verify_status: verified
+
+  - id: C6
+    text: "Default match format is best of three sets; two sets win the match."
+    source_ids: [S1]
+    confidence:
+      headline: 95
+      SQ: 98
+      EC: 90
+      CG: 98
+      CO: 90
+      VR: 95
+    verify_status: verified
+
+  - id: C7
+    text: "Set tie-break uses numeric scoring (zero, 1, 2, 3…), first to seven points with a two-point margin; set finishes 7–6."
+    source_ids: [S1]
+    confidence:
+      headline: 95
+      SQ: 98
+      EC: 90
+      CG: 98
+      CO: 90
+      VR: 95
+    verify_status: verified
+
+  - id: C8
+    text: "FIP alternative score methods include four-game mini-sets, a seven-point match tie-break replacing the third set, and a ten-point super tie-break replacing the third set."
+    source_ids: [S1]
+    confidence:
+      headline: 93
+      SQ: 98
+      EC: 88
+      CG: 95
+      CO: 85
+      VR: 93
+    verify_status: verified
+
+  - id: C9
+    text: "Third set may be played without a set tie-break if previously established; at 6–6 the pair must win by two games."
+    source_ids: [S1]
+    confidence:
+      headline: 92
+      SQ: 98
+      EC: 85
+      CG: 95
+      CO: 82
+      VR: 92
+    verify_status: verified
+
+  - id: C10
+    text: "In mixed doubles deciding points (Golden Point / Star Point), the receiver must be the same sex as the server."
+    source_ids: [S1]
+    confidence:
+      headline: 92
+      SQ: 98
+      EC: 85
+      CG: 95
+      CO: 80
+      VR: 92
+    verify_status: verified
+
+  - id: C11
+    text: "FIP publishes separate circuit rulebooks for Premier Padel and CUPRA FIP Tour in addition to the core Rules of Padel."
+    source_ids: [S2]
+    confidence:
+      headline: 90
+      SQ: 95
+      EC: 85
+      CG: 90
+      CO: 85
+      VR: 90
+    verify_status: verified
+
+  - id: C12
+    text: "Official FIP player ranking aggregates a player's 22 best results from Premier Padel and CUPRA FIP Tour over a rolling cycle."
+    source_ids: [S3, S4]
+    confidence:
+      headline: 88
+      SQ: 95
+      EC: 82
+      CG: 88
+      CO: 80
+      VR: 88
+    verify_status: verified
+
+  - id: C13
+    text: "FIP ranking point defence follows a continuous 52-week cycle tied to corresponding tournament weeks."
+    source_ids: [S3]
+    confidence:
+      headline: 85
+      SQ: 95
+      EC: 75
+      CG: 88
+      CO: 78
+      VR: 85
+    verify_status: verified
+
+  - id: C14
+    text: "From 2026, Premier Padel and CUPRA FIP Tour default to Star Point as the deuce system."
+    source_ids: [S5, S1]
+    confidence:
+      headline: 82
+      SQ: 88
+      EC: 80
+      CG: 85
+      CO: 75
+      VR: 82
+    verify_status: verified
+
+  - id: C15
+    text: "Circuits and organizers choose among FIP-validated deuce formats; recognition in FIP rules does not force use on every circuit."
+    source_ids: [S6, S1]
+    confidence:
+      headline: 72
+      SQ: 70
+      EC: 75
+      CG: 72
+      CO: 70
+      VR: 75
+    verify_status: contested
+
+  - id: C16
+    text: "Recreational or competition variants require explicit pre-match or pre-event agreement on scoring and match length."
+    source_ids: [S7, S1]
+    confidence:
+      headline: 40
+      SQ: 55
+      EC: 45
+      CG: 40
+      CO: 50
+      VR: 40
+    verify_status: snippet-only
+
+  - id: C17
+    text: "Americano and Mexicano recreational formats use +1 point per rally won, typically to 16/24/32 points or a time limit."
+    source_ids: [S8, S9]
+    confidence:
+      headline: 68
+      SQ: 55
+      EC: 70
+      CG: 75
+      CO: 65
+      VR: 70
+    verify_status: verified
+
+  - id: C18
+    text: "Americano credits each player on a pair with the pair's total points for that round; cumulative individual totals determine the winner."
+    source_ids: [S8]
+    confidence:
+      headline: 65
+      SQ: 55
+      EC: 65
+      CG: 72
+      CO: 60
+      VR: 68
+    verify_status: verified
+
+  - id: C19
+    text: "Mexicano uses the same rally scoring as Americano but re-pairs players each round from the live leaderboard after round one."
+    source_ids: [S9]
+    confidence:
+      headline: 65
+      SQ: 55
+      EC: 65
+      CG: 72
+      CO: 60
+      VR: 68
+    verify_status: verified
+
+  - id: C20
+    text: "PBPI is Indonesia's national padel federation but no verifiable published scoring rulebook was retrieved in this research pass."
+    source_ids: [S10]
+    confidence:
+      headline: 40
+      SQ: 50
+      EC: 35
+      CG: 45
+      CO: 30
+      VR: 40
+    verify_status: snippet-only

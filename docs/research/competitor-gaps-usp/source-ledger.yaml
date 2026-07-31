@@ -1,0 +1,394 @@
+# source-ledger.yaml — padelski.id Phase 0 Wave 2 (T1 competitor gaps / USP)
+# Generated: 2026-07-31 (UTC). Boundary: public-extended. Verify-before-cite applied.
+
+schema_version: "1.0"
+research_slug: competitor-gaps-usp
+generated_at: "2026-07-31T01:15:00Z"
+source_boundary: public-extended
+domain_primary: market-competitive
+domain_secondary: [health-fitness]
+
+meta:
+  question: "For R1 competitors — pain points solved, USP, enhancement opportunities → padelski.id feature candidates; rank gaps on PlaySession, ScoreEvent, SlotClaim, unofficial realm, spectator link, power-user mobile scoring"
+  depth: adversarial-deep
+  upstream_brief: docs/research/competitor-landscape/deep-research-brief.md
+  orchestration: "degraded sequential single-context (Hunter→Practitioner→Skeptic→Arbiter roles in one thread)"
+  accessed_default: "2026-07-31"
+
+sources:
+  - id: S1
+    url: https://playtomic.com/
+    title: "Playtomic — Join the community and book courts online"
+    tier: T1
+    fetch_status: verified
+    verified_at: "2026-07-31T01:00:00Z"
+    excerpt: "Book courts and find matches from your phone; track your progress with our leveling system; view match stats and reservation history anytime."
+    excerpt_word_count: 22
+    author: "Playtomic S.L."
+    published_date: "2026"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports, competitive]
+    contradicts: []
+    notes: "Vendor homepage; Forbes quote cites 4M players / 5500 clubs on same page."
+    claim_ids: [C1, C2, C10]
+
+  - id: S2
+    url: https://www.courtside.id/
+    title: "Courtside — Indonesia's padel-only app"
+    tier: T1
+    fetch_status: verified
+    verified_at: "2026-07-31T01:01:00Z"
+    excerpt: "Track your previous matches, scores, and playing history; join and create Open Play matches with other players."
+    excerpt_word_count: 16
+    author: "Courtside Indonesia"
+    published_date: "2025"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports]
+    contradicts: []
+    notes: "Primary Indonesia padel-native vendor site."
+    claim_ids: [C3, C4, C10]
+
+  - id: S3
+    url: https://courtside.id/mobile-apps?mitra_id=9fd76698-0822-4bdd-ac06-c8720411b328
+    title: "Courtside mobile apps feature page"
+    tier: T1
+    fetch_status: verified
+    verified_at: "2026-07-31T01:02:00Z"
+    excerpt: "Ring the bell for slots you really want; when someone cancels you'll be the first to know; track each other's scores in the future."
+    excerpt_word_count: 22
+    author: "Courtside Indonesia"
+    published_date: "2025"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports]
+    contradicts: []
+    notes: "Roadmap mentions official ranking, live matchmaking, profile and friends coming soon."
+    claim_ids: [C4, C5, C11]
+
+  - id: S4
+    url: https://www.ayo.co.id/
+    title: "AYO — Super Sport Community App"
+    tier: T1
+    fetch_status: verified
+    verified_at: "2026-07-31T01:03:00Z"
+    excerpt: "Platform for sewa lapangan, cari lawan sparring, atau cari kawan main bareng; padel listed among sports; 900.000+ pengguna."
+    excerpt_word_count: 18
+    author: "AYO Indonesia"
+    published_date: "2026"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports]
+    contradicts: []
+    notes: "Multi-sport marketplace; vendor scale self-reported."
+    claim_ids: [C6]
+
+  - id: S5
+    url: https://play.google.com/store/apps/details?id=com.padler.id.padler&hl=en
+    title: "Padler: Padel Player — Google Play"
+    tier: T1
+    fetch_status: verified
+    verified_at: "2026-07-31T01:04:00Z"
+    excerpt: "Find padel sessions hosted by verified hosts; track stats; climb the leaderboard; join matches with in-app payments to avoid scams."
+    excerpt_word_count: 20
+    author: "PT Dewan Padel Rakyat"
+    published_date: "2026-03-14"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports]
+    contradicts: []
+    notes: "Indonesia-exclusive padel community app listing."
+    claim_ids: [C7]
+
+  - id: S6
+    url: https://play.google.com/store/apps/details?id=com.padelmates&hl=en
+    title: "Padel Mates — Google Play"
+    tier: T1
+    fetch_status: verified
+    verified_at: "2026-07-31T01:05:00Z"
+    excerpt: "Book courts, find players, join matches; smart matching by skill level; split costs; get feedback on your game level after each match."
+    excerpt_word_count: 22
+    author: "Padel Mates International AB"
+    published_date: "2026-06-03"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports]
+    contradicts: []
+    notes: "Store reviews cite buggy UX, payment list sorting, notification failures."
+    claim_ids: [C8]
+
+  - id: S7
+    url: https://nettla.co/
+    title: "Nettla — White-label booking & management"
+    tier: T1
+    fetch_status: verified
+    verified_at: "2026-07-31T01:06:00Z"
+    excerpt: "Public and private matches; smart level algorithm groups players by skill; leagues module; white-label app for clubs."
+    excerpt_word_count: 17
+    author: "Nettla"
+    published_date: "2026"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports]
+    contradicts: []
+    notes: "B2B2C white-label; UK-centric club operator testimonials."
+    claim_ids: [C9]
+
+  - id: S8
+    url: https://play.google.com/store/apps/details?id=com.racketpal&hl=en
+    title: "RacketPal by Sportega — Google Play"
+    tier: T1
+    fetch_status: verified
+    verified_at: "2026-07-31T01:07:00Z"
+    excerpt: "AI constantly calculating performance to update skill level; organise public games; reviews cite ghost profiles and inactive users."
+    excerpt_word_count: 17
+    author: "RacketPal Ltd"
+    published_date: "2026-06-25"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports]
+    contradicts: []
+    notes: "3.6★ rating; padel is one of several racket sports."
+    claim_ids: [C12]
+
+  - id: S9
+    url: https://apps.apple.com/sg/app/pop-padel/id6740097939
+    title: "Pop Padel — App Store (Singapore)"
+    tier: T1
+    fetch_status: verified
+    verified_at: "2026-07-31T01:08:00Z"
+    excerpt: "Book courts quickly; connect with other players through Game Match; discover events and programs."
+    excerpt_word_count: 14
+    author: "Pop Padel Pte. Ltd."
+    published_date: "2026-07-23"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports]
+    contradicts: []
+    notes: "SG/MY club-operator app; minimal review base."
+    claim_ids: [C13]
+
+  - id: S10
+    url: https://matchi.se/
+    title: "MATCHi — Search, book, play"
+    tier: T1
+    fetch_status: verified
+    verified_at: "2026-07-31T01:09:00Z"
+    excerpt: "Complete booking system for racket sports venues worldwide; matched with players at the same level."
+    excerpt_word_count: 15
+    author: "MATCHi"
+    published_date: "2026"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports]
+    contradicts: []
+    notes: "Nordics/EU focus; multi-sport single account."
+    claim_ids: [C14]
+
+  - id: S11
+    url: https://play.google.com/store/apps/details?id=com.playtomic&hl=en
+    title: "Playtomic — Google Play listing"
+    tier: T1
+    fetch_status: verified
+    verified_at: "2026-07-31T01:10:00Z"
+    excerpt: "Create private games or make them public; split court fees; basic stats like matches played, wins, losses, and final scores with free account."
+    excerpt_word_count: 22
+    author: "Playtomic S.L."
+    published_date: "2026-07-24"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports]
+    contradicts: []
+    notes: "Reviews cite open-match fee frustration and level-slider UX complaints."
+    claim_ids: [C1, C2, C15]
+
+  - id: S12
+    url: https://properpadel.uk/2025/09/12/is-playtomics-rating-system-flawed/
+    title: "Is Playtomic's rating system flawed? — Proper Padel"
+    tier: T2
+    fetch_status: verified
+    verified_at: "2026-07-31T01:11:00Z"
+    excerpt: "Questionnaire leads to inaccurate ratings from the start; friend-group matches inflate reliability without cross-pool play; wasted time and money on mismatched open matches."
+    excerpt_word_count: 22
+    author: "Proper Padel / Asa Jay Ackley"
+    published_date: "2025-09-12"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports]
+    contradicts: []
+    notes: "Independent UK padel media; ELO pain-point synthesis."
+    claim_ids: [C16, C17]
+
+  - id: S13
+    url: https://actu-padel.com/en/playtomic-and-its-ranking-a-real-reference-for-your-matches-or-a-reliability-to-be-relativized/
+    title: "Playtomic ranking: real reference or reliability to relativize — Actu Padel"
+    tier: T2
+    fetch_status: verified
+    verified_at: "2026-07-31T01:12:00Z"
+    excerpt: "Playtomic is highly effective for organizing padel, only partially reliable for measuring it; official ranking and Playtomic level do not serve the same purpose."
+    excerpt_word_count: 22
+    author: "Actu Padel"
+    published_date: "2026"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports]
+    contradicts: []
+    notes: "Supports unofficial-realm positioning vs marketplace ELO passport."
+    claim_ids: [C16, C17]
+
+  - id: S14
+    url: https://mwm.ai/apps/courtside-padel-app/6737027746
+    title: "Courtside — MWM app intelligence & reviews"
+    tier: T2
+    fetch_status: verified
+    verified_at: "2026-07-31T01:13:00Z"
+    excerpt: "Price check journey takes three steps and is frustrating; lacking booking details and transaction details pages after successful payment."
+    excerpt_word_count: 18
+    author: "MWM (aggregator)"
+    published_date: "2026"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports]
+    contradicts: []
+    notes: "Aggregates App Store user reviews; corroborates Courtside UX friction."
+    claim_ids: [C18]
+
+  - id: S15
+    url: https://courtiq.co.za/
+    title: "CourtIQ — AI-Powered Court Sport Platform"
+    tier: T2
+    fetch_status: verified
+    verified_at: "2026-07-31T01:14:00Z"
+    excerpt: "Score matches in real time; all participants see updates instantly; Playtomic integration imports bookings — live scoring is separate product layer."
+    excerpt_word_count: 18
+    author: "Yesterday's Anarchy Gaming"
+    published_date: "2026"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports, tech]
+    contradicts: []
+    notes: "Adjacent live-scoring product; proves booking apps leave live score gap."
+    claim_ids: [C19, C20]
+
+  - id: S16
+    url: https://apps.apple.com/us/app/vamos-courtside-play-padel/id6743862759
+    title: "Vamos Courtside — App Store"
+    tier: T1
+    fetch_status: verified
+    verified_at: "2026-07-31T01:15:00Z"
+    excerpt: "Nearby devices can instantly join as spectators; free to join matches as spectator; host matches requires subscription."
+    excerpt_word_count: 16
+    author: "Mayker Ltd"
+    published_date: "2026"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports]
+    contradicts: []
+    notes: "Dedicated scoreboard app — not integrated with Playtomic/Courtside booking stack."
+    claim_ids: [C19, C21]
+
+  - id: S17
+    url: https://book.pop-padel.com/
+    title: "Pop Padel Redhill booking portal"
+    tier: T1
+    fetch_status: verified
+    verified_at: "2026-07-31T01:16:00Z"
+    excerpt: "Clinic bands use level ranges e.g. Newbie 1.0-1.5, High Bronze 2.0-2.5 — Playtomic-style decimal bands."
+    excerpt_word_count: 16
+    author: "Pop Padel Pte. Ltd."
+    published_date: "2026"
+    accessed_date: "2026-07-31"
+    domain_tags: [sports]
+    contradicts: []
+    notes: "Carried forward from R1; SEA level-band literacy."
+    claim_ids: [C13]
+
+failed:
+  - url: https://playerhelp.playtomic.com/hc/en-gb/articles/19832116272785-How-can-I-delete-myself-from-a-Public-Match
+    title: "Playtomic Help — delete from public match / 24h policy"
+    fetch_status: failed
+    notes: "Fetch timeout; open-match cancellation rigidity cited in T2 reviews only — not ledger-cited in prose."
+
+claims:
+  - id: C1
+    text: "Playtomic solves court discovery, payments, open-match fill, and cross-club 0–7 leveling but treats scoring as post-match stats tied to marketplace ELO."
+    source_ids: [S1, S11]
+    confidence:
+      headline: 78
+      SQ: 85
+      EC: 72
+      CG: 82
+      CO: 75
+      VR: 80
+    verify_status: verified
+
+  - id: C2
+    text: "Playtomic open-match UX creates fill/cancellation friction (fees, level slider, empty-match charges per user reviews)."
+    source_ids: [S11]
+    confidence:
+      headline: 55
+      SQ: 70
+      EC: 45
+      CG: 60
+      CO: 50
+      VR: 65
+    verify_status: verified
+
+  - id: C3
+    text: "Courtside solves Indonesia padel booking fragmentation, open play, and post-match score history."
+    source_ids: [S2]
+    confidence:
+      headline: 80
+      SQ: 85
+      EC: 70
+      CG: 88
+      CO: 78
+      VR: 82
+    verify_status: verified
+
+  - id: C4
+    text: "Courtside offers passive slot waitlist (ring the bell) not organizer-mediated SlotClaim."
+    source_ids: [S3]
+    confidence:
+      headline: 75
+      SQ: 85
+      EC: 60
+      CG: 80
+      CO: 70
+      VR: 82
+    verify_status: verified
+
+  - id: C5
+    text: "Courtside roadmap acknowledges gaps: live matchmaking and score tracking among friends still future tense."
+    source_ids: [S3]
+    confidence:
+      headline: 72
+      SQ: 85
+      EC: 55
+      CG: 78
+      CO: 68
+      VR: 82
+    verify_status: verified
+
+  - id: C16
+    text: "Marketplace ELO systems (Playtomic-class) create social-passport pain for recreational players; unofficial realm is underserved."
+    source_ids: [S12, S13]
+    confidence:
+      headline: 68
+      SQ: 60
+      EC: 72
+      CG: 75
+      CO: 70
+      VR: 78
+    verify_status: verified
+
+  - id: C19
+    text: "No R1 booking competitor natively offers integrated live ScoreEvent log plus shareable spectator link; adjacent apps (CourtIQ, Vamos) fill niche separately."
+    source_ids: [S1, S2, S15, S16]
+    confidence:
+      headline: 74
+      SQ: 75
+      EC: 70
+      CG: 78
+      CO: 72
+      VR: 80
+    verify_status: verified
+
+  - id: C20
+    text: "padelski can win highest on live ephemeral scoring + spectator link + unofficial realm stack before competing on booking table stakes."
+    source_ids: [S1, S2, S3, S12, S13, S15, S16]
+    confidence:
+      headline: 70
+      SQ: 68
+      EC: 65
+      CG: 72
+      CO: 75
+      VR: 72
+    verify_status: verified
+
+contested: []

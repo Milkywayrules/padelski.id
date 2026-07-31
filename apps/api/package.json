@@ -1,0 +1,34 @@
+{
+  "name": "@padelski/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "build": "bun build src/index.ts --outdir dist --target bun",
+    "start": "bun run dist/index.js",
+    "lint": "biome check .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.3.0",
+    "@elysiajs/openapi": "^1.3.0",
+    "@padelski/activity-log": "workspace:*",
+    "@padelski/auth": "workspace:*",
+    "@padelski/db": "workspace:*",
+    "@padelski/domain": "workspace:*",
+    "@padelski/env": "workspace:*",
+    "@padelski/ws-protocol": "workspace:*",
+    "@opentelemetry/api": "^1.9.0",
+    "drizzle-orm": "^0.43.1",
+    "elysia": "^1.3.3",
+    "zod": "^3.25.28"
+  },
+  "devDependencies": {
+    "@padelski/config": "workspace:*",
+    "@types/bun": "^1.2.15",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  }
+}

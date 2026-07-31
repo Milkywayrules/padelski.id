@@ -1,0 +1,17 @@
+{
+  "extends": "@padelski/config/tsconfig.node.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "types": ["bun"],
+    "paths": {
+      "@padelski/activity-log": ["../../packages/activity-log/src/index.ts"],
+      "@padelski/auth": ["../../packages/auth/src/index.ts"],
+      "@padelski/db": ["../../packages/db/src/index.ts"],
+      "@padelski/domain": ["../../packages/domain/src/index.ts"],
+      "@padelski/env": ["../../packages/env/src/index.ts"],
+      "@padelski/env/*": ["../../packages/env/src/*"],
+      "@padelski/ws-protocol": ["../../packages/ws-protocol/src/index.ts"]
+    }
+  },
+  "include": ["src"]
+}

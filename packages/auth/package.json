@@ -1,0 +1,35 @@
+{
+  "name": "@padelski/auth",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./client": {
+      "types": "./src/client.ts",
+      "default": "./src/client.ts"
+    },
+    "./abilities": {
+      "types": "./src/abilities.ts",
+      "default": "./src/abilities.ts"
+    }
+  },
+  "scripts": {
+    "lint": "biome check .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@casl/ability": "^6.7.3",
+    "better-auth": "^1.2.8",
+    "zod": "^3.25.28"
+  },
+  "devDependencies": {
+    "@padelski/config": "workspace:*",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  }
+}

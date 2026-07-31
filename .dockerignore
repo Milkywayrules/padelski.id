@@ -1,0 +1,15 @@
+node_modules
+.turbo
+dist
+.next
+coverage
+.git
+.github
+_bmad-output
+.bmad-loop
+docs
+*.md
+!README.md
+.env
+.env.*
+!.env.example

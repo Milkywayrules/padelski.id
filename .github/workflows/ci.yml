@@ -1,47 +1,33 @@
-# verasic-governance-ci: managed
 name: ci
 
 on:
   push:
-    branches: [main, master]
+    branches: [main]
   pull_request:
-
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
+    branches: [main]
 
 jobs:
-  setup:
-    name: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Record workspace
-        run: echo "workspace=$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
-
-  lint:
-    name: lint
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Lint stub
-        run: echo "lint stub — replace with project linter"
-
-  test:
-    name: test
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Test stub
-        run: echo "test stub — replace with project test runner"
-
   ci:
     name: ci
-    needs: [lint, test]
     runs-on: ubuntu-latest
     steps:
-      - name: Summary
-        run: |
-          echo "ci job green — required status check name for branch protection"
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Lint
+        run: bun run lint
+
+      - name: Typecheck
+        run: bun run typecheck
+
+      - name: Test
+        run: bun run test
+
+      - name: Build
+        run: bun run build

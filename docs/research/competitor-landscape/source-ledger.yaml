@@ -1,0 +1,176 @@
+# source-ledger.yaml — padelski.id Phase 0 competitor landscape
+# Generated: 2026-07-31 (UTC). Boundary: public-extended. Verify-before-cite applied.
+
+meta:
+  question: "Global padel app/web competitors with Indonesia/SEA focus — recreational (non-federation) landscape"
+  depth: adversarial-deep
+  domain_pack: general
+  orchestration: "degraded sequential single-context (T2 Hunter→Practitioner→Skeptic→Arbiter roles in one thread)"
+  accessed_default: "2026-07-31"
+
+sources:
+  - sn: 1
+    url: https://playtomic.com/
+    title: "Playtomic — Join the community and book courts online"
+    tier: T1
+    verified: yes
+    snippet: "Playtomic is the world's leading App for racket sport players and clubs… Book courts and find matches… Track your progress with our leveling system."
+    accessed: "2026-07-31"
+    domain_tags: [tech, sports]
+    notes: "Official vendor homepage; Forbes quote cites 4M players, 5500 clubs, 52+ countries (third-party press on same page)."
+
+  - sn: 2
+    url: https://www.courtside.id/
+    title: "Courtside — Indonesia's padel-only app"
+    tier: T1
+    verified: yes
+    snippet: "300,000+ padel players, 400+ padel clubs, 29 cities… Book courts… Track matches, scores, and history… Join & create Open Play matches."
+    accessed: "2026-07-31"
+    domain_tags: [sports]
+    notes: "Vendor-reported scale figures; primary Indonesia padel-native platform."
+
+  - sn: 3
+    url: https://www.ayo.co.id/
+    title: "AYO — Super Sport Community App"
+    tier: T1
+    verified: yes
+    snippet: "900.000+ pengguna, 100+ kota, 2.000+ fasilitas, 6.800+ lapangan… Sewa lapangan, sparring, main bareng… Padel listed among sports."
+    accessed: "2026-07-31"
+    domain_tags: [sports]
+    notes: "Indonesian-language official site; multi-sport marketplace."
+
+  - sn: 4
+    url: https://play.google.com/store/apps/details?id=com.padler.id.padler&hl=en
+    title: "Padler: Padel Player — Google Play"
+    tier: T1
+    verified: yes
+    snippet: "Find padel sessions hosted by verified hosts… Join communities… Track stats… Climb the leaderboard… In-app payments… Share on the feed."
+    accessed: "2026-07-31"
+    domain_tags: [sports]
+    notes: "Official app listing; Indonesia-focused vendor PT Dewan Padel Rakyat."
+
+  - sn: 5
+    url: https://matchi.se/
+    title: "MATCHi — Search, book, play"
+    tier: T1
+    verified: yes
+    snippet: "Complete booking system for racket sports venues worldwide… Padel, tennis, badminton… Book and pay… Matched with players at the same level."
+    accessed: "2026-07-31"
+    domain_tags: [sports]
+    notes: "Official vendor site; venue count widgets rendered 0 in static fetch (likely JS-populated)."
+
+  - sn: 6
+    url: https://play.google.com/store/apps/details?id=com.padelmates&hl=en
+    title: "Padel Mates — Google Play"
+    tier: T1
+    verified: yes
+    snippet: "Book courts, find players, join matches… Smart matching by skill level… Split costs… Feedback on game level after each match."
+    accessed: "2026-07-31"
+    domain_tags: [sports]
+    notes: "100K+ downloads; mixed UX reviews in store."
+
+  - sn: 7
+    url: https://nettla.co/
+    title: "Nettla — White-label booking & management"
+    tier: T1
+    verified: yes
+    snippet: "Public and private matches… Smart level algorithm… In-app messaging… Leagues module… Padel clubs: smart levels algorithm groups players by skill."
+    accessed: "2026-07-31"
+    domain_tags: [sports]
+    notes: "UK-centric white-label B2B2C; Smash Padel rollout cited in secondary press [13]."
+
+  - sn: 8
+    url: https://play.google.com/store/apps/details?id=com.racketpal&hl=en
+    title: "RacketPal by Sportega — Google Play"
+    tier: T1
+    verified: yes
+    snippet: "Find local players… AI constantly calculating performance to update skill level… Join local leagues… Organise public games."
+    accessed: "2026-07-31"
+    domain_tags: [sports]
+    notes: "Player-matching focus; 3.6★ store rating; padel is one of several racket sports."
+
+  - sn: 9
+    url: https://apps.apple.com/sg/app/pop-padel/id6740097939
+    title: "Pop Padel — App Store (Singapore)"
+    tier: T1
+    verified: yes
+    snippet: "Book courts quickly… Connect with other players through Game Match… Discover events and programs."
+    accessed: "2026-07-31"
+    domain_tags: [sports]
+    notes: "Singapore/Malaysia operator Pop Padel Pte. Ltd."
+
+  - sn: 10
+    url: https://playtomic.com/clubs/indopadel-bali
+    title: "INDOPADEL.BALI on Playtomic"
+    tier: T1
+    verified: yes
+    snippet: "First indoor padel club in Indonesia… tournaments, social events, coaching… Level-filtered competitions (e.g. 0–7, 2–4 player bands)."
+    accessed: "2026-07-31"
+    domain_tags: [sports]
+    notes: "Confirms Playtomic operational presence in Indonesia (Bali cluster); not nationwide Jakarta dominance."
+
+  - sn: 11
+    url: https://book.pop-padel.com/
+    title: "Pop Padel Redhill booking portal"
+    tier: T1
+    verified: yes
+    snippet: "Clinic bands use level ranges e.g. Low Silver (2.5-3.0), Newbie (1.0-1.5), High Bronze (2.0-2.5)."
+    accessed: "2026-07-31"
+    domain_tags: [sports]
+    notes: "Level nomenclature aligns with Playtomic-style 0–7 decimal bands."
+
+  - sn: 12
+    url: https://ukpadelguide.co.uk/blog/padel-court-booking-apps-uk-2026/
+    title: "Padel Court Booking Apps UK 2026 — UK Padel Guide"
+    tier: T2
+    verified: snippet-only
+    snippet: "Playtomic 0.0–7.0 Elo-style scale auto-adjusted after logged matches… MATCHi own scale, doesn't map 1:1 to Playtomic."
+    accessed: "2026-07-31"
+    domain_tags: [sports]
+    notes: "Secondary comparison blog; used for scoring-system detail where Playtomic help docs blocked by Cloudflare."
+
+  - sn: 13
+    url: https://smashpadel.co/2025/10/15/smash-padel-transitions-all-clubs-to-innovative-booking-and-management-platform-nettla/
+    title: "Smash Padel transitions to Nettla"
+    tier: T2
+    verified: yes
+    snippet: "Nettla… court booking and player matchmaking… fully integrated experience… rollout across Smash Padel UK locations."
+    accessed: "2026-07-31"
+    domain_tags: [sports]
+    notes: "Club operator press release; corroborates Nettla UK padel adoption."
+
+  - sn: 14
+    url: https://padeli.com/get-started/glossary/matchi-level/
+    title: "What is MATCHi level? — Padeli glossary"
+    tier: T2
+    verified: snippet-only
+    snippet: "MATCHi level is self-rating 1–10… Unlike Playtomic's algorithmic rating, MATCHi relies on player self-assessment with light match check-in adjustment."
+    accessed: "2026-07-31"
+    domain_tags: [sports]
+    notes: "T2 glossary; corroborates MATCHi self-declared level model."
+
+  - sn: 15
+    url: https://www.playskan.com/blog/padel-levels-explained-uk
+    title: "Padel Levels Explained — Playskan Blog"
+    tier: T2
+    verified: snippet-only
+    snippet: "Padel Mates rolled out an ELO system in 2024 on the same 0.0–7.0 scale as Playtomic."
+    accessed: "2026-07-31"
+    domain_tags: [sports]
+    notes: "T2 industry blog for Padel Mates ELO claim; not verified on vendor primary page."
+
+failed:
+  - url: https://playerhelp.playtomic.com/hc/en-gb/articles/43310980754193-How-the-Playtomic-level-system-works
+    title: "Playtomic Help — level system"
+    verified: failed
+    notes: "Cloudflare challenge; primary T0 docs unavailable in readonly fetch."
+  - url: https://www.tiesports.com/tieplayer
+    title: "TiePlayer Portugal"
+    verified: failed
+    notes: "Fetch timeout; included as unverified competitor candidate."
+  - url: https://ayo.app/
+    title: "AYO.app alternate domain"
+    verified: failed
+    notes: "Timeout; verified via ayo.co.id instead."
+
+contested: []

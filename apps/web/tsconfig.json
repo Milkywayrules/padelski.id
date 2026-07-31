@@ -1,0 +1,21 @@
+{
+  "extends": "@padelski/config/tsconfig.react.json",
+  "compilerOptions": {
+    "plugins": [{ "name": "next" }],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@padelski/ui": ["../../packages/ui/src/index.tsx"],
+      "@padelski/ui/*": ["../../packages/ui/src/*"],
+      "@padelski/domain": ["../../packages/domain/src/index.ts"],
+      "@padelski/domain/*": ["../../packages/domain/src/*"],
+      "@padelski/env": ["../../packages/env/src/index.ts"],
+      "@padelski/env/*": ["../../packages/env/src/*"],
+      "@padelski/auth/client": ["../../packages/auth/src/client.ts"]
+    },
+    "jsx": "preserve",
+    "noEmit": true,
+    "incremental": true
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
