@@ -4,9 +4,13 @@
 
 ## GitHub agent harness
 
-- Load `GH_TOKEN` before any `gh` mutation: `source .cursor/skills/verasic-github-cli-init/scripts/load-gh-env.sh` (or `.agents/skills/` equivalent).
-- Verify with `bash .cursor/skills/verasic-github-cli-init/scripts/check-gh.sh` — never bare `gh auth status` in chat.
-- Prefer HTTPS remotes with PAT for agent pushes when SSH is unavailable.
+- Load `GH_TOKEN` before any `gh` mutation: `source .agents/skills/verasic-github-cli-init/scripts/load-gh-env.sh` (or `.cursor/skills/` equivalent).
+- Verify with `bash .agents/skills/verasic-github-cli-init/scripts/check-gh.sh` — never bare `gh auth status` in chat.
+- Agents push **feature branches only** and open a PR; **never push to `main`** (including `git push https://x-access-token:...@github.com/owner/repo.git main` or `feature:main` refspecs).
+- HTTPS + PAT is for auth to push feature branches when SSH is unavailable — not a license to update the default branch.
+- `VERASIC_GOVERNANCE_BYPASS=1` bypasses the **local** pre-push hook only; GitHub branch protection still applies when configured.
+- Never use `git push --no-verify` to skip hooks — the local gate is fast feedback only; GitHub branch protection is the hard backstop.
+- Prefer agent PATs with **Contents** + **Pull requests** write — not **Administration** write (admin tokens can disable protection).
 
 ## Governance routing
 

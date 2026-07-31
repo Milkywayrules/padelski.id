@@ -245,9 +245,21 @@ for hook in pre-push pre-commit; do
   copy_hook "$SKILL_ROOT/hooks/$hook" "$hook"
 done
 
+GATE_DEST="$REPO_ROOT/scripts/governance/ensure-pre-push-gate.sh"
+if [[ -f "$SKILL_ROOT/scripts/ensure-pre-push-gate.sh" ]]; then
+  if [[ -f "$GATE_DEST" && "$FORCE" -eq 0 ]]; then
+    echo "bootstrap-repo: skip (exists) $GATE_DEST"
+  else
+    mkdir -p "$(dirname "$GATE_DEST")"
+    cp "$SKILL_ROOT/scripts/ensure-pre-push-gate.sh" "$GATE_DEST"
+    chmod +x "$GATE_DEST"
+    echo "bootstrap-repo: wrote $GATE_DEST"
+  fi
+fi
+
 if [[ ! -f "$REPO_ROOT/.gitignore" ]]; then
   printf '%s\n' '# local' '.lefthook-local.yml' > "$REPO_ROOT/.gitignore"
   echo "bootstrap-repo: wrote .gitignore (minimal)"
 fi
 
-echo "bootstrap-repo: done — run wire-hooks.sh && lefthook install"
+echo "bootstrap-repo: done — run wire-hooks.sh (installs lefthook + governance gate)"

@@ -103,8 +103,7 @@ echo "governance skill: $GOV_ROOT"
 echo
 echo " steps:"
 plan_line "bootstrap-repo.sh ${bootstrap_args[*]:-(default)}"
-plan_line "wire-hooks.sh"
-plan_line "lefthook install (when lefthook available)"
+plan_line "wire-hooks.sh (lefthook install + ensure-pre-push-gate.sh)"
 plan_line "doctor.sh"
 plan_line "detect-posture.sh (governance tier recommendation)"
 [[ "$OPEN_PR" -eq 1 ]] && plan_line "open PR on chore/governance-bootstrap"
@@ -128,11 +127,18 @@ elif [[ "$rc" -ne 0 ]]; then
 fi
 
 bash "$GOV_ROOT/scripts/wire-hooks.sh"
-if command -v lefthook >/dev/null 2>&1; then
-  lefthook install
-  echo "factory: lefthook install ok"
-else
-  echo "factory: WARN — lefthook not installed; run 'lefthook install' when available"
+# wire-hooks runs lefthook install + ensure-pre-push-gate when lefthook is available.
+# Re-assert gate only — bare lefthook install would wipe the governance gate.
+gate_script=""
+for p in "$REPO_ROOT/scripts/governance/ensure-pre-push-gate.sh" "$GOV_ROOT/scripts/ensure-pre-push-gate.sh"; do
+  [[ -f "$p" ]] && gate_script="$p" && break
+done
+if [[ -n "$gate_script" ]] && command -v lefthook >/dev/null 2>&1; then
+  bash "$gate_script"
+elif [[ -z "$gate_script" ]]; then
+  echo "factory: WARN — ensure-pre-push-gate.sh missing"
+elif ! command -v lefthook >/dev/null 2>&1; then
+  echo "factory: WARN — lefthook not installed; run wire-hooks when lefthook is available"
 fi
 
 set +e

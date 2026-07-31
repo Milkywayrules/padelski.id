@@ -13,14 +13,16 @@
     "db:migrate": "bun run --filter @padelski/db db:migrate",
     "doppler:setup": "doppler setup --project padelski-id",
     "doppler:validate": "bun scripts/doppler-validate.ts",
-    "doppler:clear": "bun scripts/doppler-clear.ts"
+    "doppler:clear": "bun scripts/doppler-clear.ts",
+    "governance:test": "bash scripts/governance/test-pre-push-regression.sh",
+    "prepare": "lefthook install && bash scripts/governance/ensure-pre-push-gate.sh"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@padelski/config": "workspace:*",
     "@padelski/env": "workspace:*",
     "@types/node": "^22.15.21",
-    "lefthook": "^1.10.0",
+    "lefthook": "^2.1.0",
     "turbo": "^2.5.0",
     "typescript": "^5.8.3",
     "ultracite": "^4.2.1",
