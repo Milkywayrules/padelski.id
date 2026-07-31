@@ -1,4 +1,4 @@
-import { spawnSync, type SpawnSyncOptionsWithStringEncoding } from "node:child_process";
+import { type SpawnSyncOptionsWithStringEncoding, spawnSync } from "node:child_process";
 
 /** Set by scripts/coolify/ensure-doppler.sh — e.g. "doppler" or "bunx doppler". */
 export function resolveDopplerInvocation(): { command: string; prefixArgs: string[] } {

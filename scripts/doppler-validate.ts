@@ -34,7 +34,16 @@ if (!(config in DOPPLER_CONFIG_TO_APP_ENV)) {
 const dopplerConfig = config as DopplerConfigSlug;
 
 function getSecretPlain(key: string): string | null {
-  const result = spawnDoppler(["secrets", "get", key, "--plain", "-p", PROJECT, "-c", dopplerConfig]);
+  const result = spawnDoppler([
+    "secrets",
+    "get",
+    key,
+    "--plain",
+    "-p",
+    PROJECT,
+    "-c",
+    dopplerConfig,
+  ]);
   if (result.status !== 0) {
     return null;
   }
@@ -47,7 +56,9 @@ function assertComposePassthrough(): boolean {
 
   for (const key of DOPPLER_RUNTIME_KEYS) {
     if (!compose.includes(`\${${key}}`)) {
-      console.error(`docker-compose.yml missing Doppler passthrough for ${key} (Pattern A Option 2)`);
+      console.error(
+        `docker-compose.yml missing Doppler passthrough for ${key} (Pattern A Option 2)`,
+      );
       ok = false;
     }
   }
@@ -62,7 +73,15 @@ function assertComposePassthrough(): boolean {
   return ok;
 }
 
-const result = spawnDoppler(["secrets", "--only-names", "--json", "-p", PROJECT, "-c", dopplerConfig]);
+const result = spawnDoppler([
+  "secrets",
+  "--only-names",
+  "--json",
+  "-p",
+  PROJECT,
+  "-c",
+  dopplerConfig,
+]);
 
 if (result.status !== 0) {
   console.error(result.stderr || "doppler secrets failed — run bun run doppler:setup");
@@ -111,7 +130,9 @@ for (const [left, right] of DOPPLER_MIRROR_PAIRS) {
   const leftValue = getSecretPlain(left);
   const rightValue = getSecretPlain(right);
   if (leftValue && rightValue && leftValue !== rightValue) {
-    console.error(`mirror mismatch in Doppler ${dopplerConfig}: ${left} != ${right} (values redacted)`);
+    console.error(
+      `mirror mismatch in Doppler ${dopplerConfig}: ${left} != ${right} (values redacted)`,
+    );
     failed = true;
   }
 }
