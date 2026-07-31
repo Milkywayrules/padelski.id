@@ -22,4 +22,4 @@ Full spec: install **verasic-github-governance** from [verasic-skills](https://g
 
 ## Verasic Fusion (default config)
 
-fusion. composer, grok, claude opus-5-medium, gpt sol, gemini 3.6 flash.
+fusion. composer, grok, claude opus-5, gpt sol, gemini 3.* flash.
