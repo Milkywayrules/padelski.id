@@ -23,10 +23,23 @@ x-doppler-web-env: &doppler-web-env
   PORT: "3000"
   HOSTNAME: "0.0.0.0"
 
+x-app-hardening: &app-hardening
+  init: true
+  read_only: true
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+  stop_grace_period: 30s
+  tmpfs:
+    - /tmp
+
 services:
   postgres:
     image: postgres:16-alpine
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     environment:
       POSTGRES_USER: padelski
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -35,8 +48,10 @@ services:
       - "5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - datastore
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U padelski"]
+      test: ["CMD-SHELL", "pg_isready -U padelski -d padelski"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -44,8 +59,14 @@ services:
   redis:
     image: redis:7-alpine
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    # Cache-only until app code uses Redis for durable state (redis.io persistence docs).
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
     expose:
       - "6379"
+    networks:
+      - datastore
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -57,17 +78,18 @@ services:
       context: .
       dockerfile: apps/api/Dockerfile
     restart: unless-stopped
-    cap_drop:
-      - ALL
-    security_opt:
-      - no-new-privileges:true
+    <<: *app-hardening
     ports:
       - "127.0.0.1:3001:3001"
     environment:
       <<: *doppler-api-env
+      PORT: "3001"
       DB_URL: postgresql://padelski:${POSTGRES_PASSWORD}@postgres:5432/padelski
       REDIS_URL: redis://redis:6379
       OTEL_SERVICE_NAME: padelski-api
+    networks:
+      - default
+      - datastore
     depends_on:
       postgres:
         condition: service_healthy
@@ -94,10 +116,10 @@ services:
         NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL}
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     restart: unless-stopped
-    cap_drop:
-      - ALL
-    security_opt:
-      - no-new-privileges:true
+    <<: *app-hardening
+    tmpfs:
+      - /tmp
+      - /app/apps/web/.next/cache:uid=1000,gid=1000,mode=0755
     ports:
       - "127.0.0.1:3000:3000"
     environment:
@@ -117,6 +139,10 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+
+networks:
+  datastore:
+    internal: true
 
 volumes:
   postgres_data:

@@ -1,4 +1,5 @@
-FROM oven/bun:1.3-alpine AS base
+# syntax=docker/dockerfile:1
+FROM oven/bun:1.3.14-alpine AS base
 WORKDIR /app
 
 FROM base AS deps
@@ -15,19 +16,22 @@ COPY packages/env/package.json ./packages/env/
 COPY packages/ui/package.json ./packages/ui/
 COPY packages/ws-protocol/package.json ./packages/ws-protocol/
 # Skip root "prepare" (lefthook/git hooks) — git is absent in Alpine.
-RUN bun install --frozen-lockfile --ignore-scripts
+RUN --mount=type=cache,target=/root/.bun/install/cache \
+    bun install --frozen-lockfile --ignore-scripts
 
 FROM base AS builder
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-RUN rm -rf apps/*/node_modules packages/*/node_modules && bun install --frozen-lockfile --ignore-scripts
+RUN rm -rf apps/*/node_modules packages/*/node_modules && \
+    bun install --frozen-lockfile --ignore-scripts
 ENV NODE_ENV=production
 RUN bun run build --filter=@padelski/api
 
 FROM base AS runner
 ENV NODE_ENV=production
+ENV PORT=3001
 WORKDIR /app
 COPY --from=builder --chown=bun:bun /app/apps/api/dist ./dist
 USER bun
 EXPOSE 3001
-CMD ["bun", "run", "dist/index.js"]
+CMD ["bun", "dist/index.js"]

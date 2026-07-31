@@ -56,5 +56,9 @@ if (( failed != 0 )); then
   exit 1
 fi
 
-count="$(grep -c '":' <<<"$names_json" || true)"
+if command -v jq >/dev/null 2>&1; then
+  count="$(jq 'if type == "array" then length else length end' <<<"$names_json")"
+else
+  count="$(grep -Eo '"[A-Z_][A-Z0-9_]*"' <<<"$names_json" | sort -u | wc -l | tr -d ' ')"
+fi
 echo "Doppler keys OK (helper validate, ${count} secrets)"
