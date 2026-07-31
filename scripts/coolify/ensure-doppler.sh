@@ -34,6 +34,15 @@ resolve_doppler() {
     return 0
   fi
 
+  # coolify-helper:1.0.14 — Alpine + docker/curl only (no bun). Bootstrap CLI once per deploy.
+  if command -v curl >/dev/null 2>&1; then
+    curl -sLf --retry 3 --proto '=https' 'https://cli.doppler.com/install.sh' | sh -s -- --install-path /usr/local/bin
+    if command -v doppler >/dev/null 2>&1; then
+      DOPPLER=(doppler)
+      return 0
+    fi
+  fi
+
   echo "error: doppler CLI not found (install on host or provide bun for bunx doppler)" >&2
   exit 1
 }
@@ -57,11 +66,12 @@ require_doppler_validate() {
     exit 1
   fi
 
-  if ! command -v bun >/dev/null 2>&1 || [[ ! -f "$root/package.json" ]]; then
-    echo "error: bun required for doppler:validate in deploy scripts" >&2
-    exit 1
+  export_doppler_cmd
+
+  if command -v bun >/dev/null 2>&1 && [[ -f "$root/package.json" ]]; then
+    doppler_run bun run doppler:validate
+    return
   fi
 
-  export_doppler_cmd
-  doppler_run bun run doppler:validate
+  doppler_run bash "$root/scripts/coolify/doppler-validate.sh"
 }
