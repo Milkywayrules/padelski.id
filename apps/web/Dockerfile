@@ -18,8 +18,9 @@ COPY packages/ws-protocol/package.json ./packages/ws-protocol/
 RUN bun install --frozen-lockfile --ignore-scripts
 
 FROM base AS builder
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+COPY --from=deps /app/node_modules ./node_modules
+RUN rm -rf apps/*/node_modules packages/*/node_modules && bun install --frozen-lockfile --ignore-scripts
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 # Interim: public URLs cross Docker build boundary until /v1/config client bootstrap (ADR-0002).

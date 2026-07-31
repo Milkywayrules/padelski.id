@@ -19,20 +19,29 @@ resolve_doppler() {
   exit 1
 }
 
+export_doppler_cmd() {
+  resolve_doppler
+  export PADELSKI_DOPPLER_CMD="${DOPPLER[*]}"
+}
+
 doppler_run() {
-  if ((${#DOPPLER[@]} == 0)); then
-    resolve_doppler
-  fi
+  export_doppler_cmd
   "${DOPPLER[@]}" run -- "$@"
 }
 
-maybe_validate_doppler_config() {
+require_doppler_validate() {
   local root="${1:-.}"
 
-  if ! command -v bun >/dev/null 2>&1 || [[ ! -f "$root/package.json" ]]; then
-    echo "note: skipping doppler:validate (bun unavailable in this environment)"
-    return 0
+  if [[ -z "${DOPPLER_TOKEN:-}" ]]; then
+    echo "error: DOPPLER_TOKEN is unset (Pattern A service token required)" >&2
+    exit 1
   fi
 
+  if ! command -v bun >/dev/null 2>&1 || [[ ! -f "$root/package.json" ]]; then
+    echo "error: bun required for doppler:validate in deploy scripts" >&2
+    exit 1
+  fi
+
+  export_doppler_cmd
   doppler_run bun run doppler:validate
 }

@@ -12,8 +12,7 @@ if ! command -v docker >/dev/null 2>&1; then
   exit 1
 fi
 
-resolve_doppler
+require_doppler_validate "$ROOT"
 export DOCKER_BUILDKIT=1
 
-maybe_validate_doppler_config "$ROOT"
-exec "${DOPPLER[@]}" run -- docker compose build "$@"
+doppler_run docker compose build "$@"

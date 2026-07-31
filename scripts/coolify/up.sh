@@ -12,6 +12,7 @@ if ! command -v docker >/dev/null 2>&1; then
   exit 1
 fi
 
-resolve_doppler
-maybe_validate_doppler_config "$ROOT"
-exec "${DOPPLER[@]}" run -- docker compose up -d --wait --remove-orphans "$@"
+require_doppler_validate "$ROOT"
+
+doppler_run docker compose up -d --wait --remove-orphans "$@"
+bash "$ROOT/scripts/coolify/smoke.sh"
