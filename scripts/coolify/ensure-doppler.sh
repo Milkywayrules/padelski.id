@@ -4,6 +4,25 @@ set -euo pipefail
 
 DOPPLER=()
 
+# Coolify writes build-time vars to /artifacts/build-time.env and injects --env-file only
+# into `docker compose` commands — not into custom `bash scripts/coolify/*.sh` wrappers.
+load_coolify_env() {
+  local f
+  for f in \
+    "${COOLIFY_BUILD_TIME_ENV:-}" \
+    "/artifacts/build-time.env" \
+    "${COOLIFY_ENV_FILE:-}" \
+    ".env"; do
+    [[ -z "$f" || ! -f "$f" ]] && continue
+    set -a
+    # shellcheck disable=SC1090
+    source "$f"
+    set +a
+  done
+}
+
+load_coolify_env
+
 resolve_doppler() {
   if command -v doppler >/dev/null 2>&1; then
     DOPPLER=(doppler)
@@ -34,6 +53,7 @@ require_doppler_validate() {
 
   if [[ -z "${DOPPLER_TOKEN:-}" ]]; then
     echo "error: DOPPLER_TOKEN is unset (Pattern A service token required)" >&2
+    echo "hint: set DOPPLER_TOKEN in Coolify with Build Variable enabled; custom build/start scripts source /artifacts/build-time.env" >&2
     exit 1
   fi
 
