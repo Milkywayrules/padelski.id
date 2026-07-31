@@ -3,7 +3,7 @@ services:
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: padelski
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-padelski}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: padelski
     ports:
       - "5432:5432"
@@ -32,7 +32,7 @@ services:
     ports:
       - "3001:3001"
     environment:
-      DB_URL: postgresql://padelski:${POSTGRES_PASSWORD:-padelski}@postgres:5432/padelski
+      DB_URL: postgresql://padelski:${POSTGRES_PASSWORD}@postgres:5432/padelski
       REDIS_URL: redis://redis:6379
     depends_on:
       postgres:
