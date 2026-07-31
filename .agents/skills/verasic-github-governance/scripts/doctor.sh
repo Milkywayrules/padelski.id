@@ -48,9 +48,12 @@ for f in lefthook.yml .lefthook.yml; do
   [[ -f "$f" ]] && lefthook_file="$f" && break
 done
 if [[ -n "$lefthook_file" ]]; then
-  if grep -q '\.github/verasic-governance/hooks/pre-push' "$lefthook_file" \
-     && grep -q '\.github/verasic-governance/hooks/pre-commit' "$lefthook_file"; then
-    echo "doctor: ok — lefthook references repo-local governance hooks ($lefthook_file)"
+  if grep -q '\.github/verasic-governance/hooks/pre-commit' "$lefthook_file"; then
+    if grep -q '\.github/verasic-governance/hooks/pre-push' "$lefthook_file"; then
+      echo "doctor: ok — lefthook references repo-local governance hooks ($lefthook_file)"
+    else
+      echo "doctor: ok — lefthook pre-commit wired; pre-push governance via git hook gate ($lefthook_file)"
+    fi
     hooks_ok=1
   elif grep -q 'verasic-github-governance/hooks/' "$lefthook_file"; then
     echo "doctor: MISSING — lefthook still references skill-local governance hooks (re-run bootstrap-repo.sh --force)"
@@ -59,13 +62,34 @@ if [[ -n "$lefthook_file" ]]; then
     echo "doctor: MISSING — lefthook missing repo-local governance hook commands"
     missing+=("lefthook governance hooks")
   fi
+  pre_push_hook="$(git rev-parse --git-path hooks/pre-push 2>/dev/null || echo .git/hooks/pre-push)"
+  if [[ -f "$pre_push_hook" ]]; then
+    if grep -qF 'verasic-governance: pre-push gate' "$pre_push_hook"; then
+      echo "doctor: ok — pre-push governance gate wired ($pre_push_hook)"
+    else
+      echo "doctor: MISSING — pre-push governance gate (run ensure-pre-push-gate.sh after lefthook install)"
+      missing+=("pre-push gate")
+    fi
+  else
+    echo "doctor: MISSING — pre-push hook ($pre_push_hook — run lefthook install && ensure-pre-push-gate.sh)"
+    missing+=("pre-push hook")
+  fi
   if command -v lefthook >/dev/null 2>&1; then
-    if [[ -f ".git/hooks/pre-push" || -f ".git/hooks/pre-commit" ]]; then
+    pre_commit_hook="$(git rev-parse --git-path hooks/pre-commit 2>/dev/null || echo .git/hooks/pre-commit)"
+    if [[ -f "$pre_commit_hook" ]]; then
       echo "doctor: ok — lefthook install appears present"
     else
       echo "doctor: WARN — run 'lefthook install'"
       warn+=("lefthook install")
     fi
+  else
+    echo "doctor: WARN — lefthook not on PATH (gate hook file check above still applies)"
+    warn+=("lefthook not on PATH")
+  fi
+  hp="$(git config core.hooksPath 2>/dev/null || true)"
+  if [[ -n "$hp" && "$hp" != *verasic-governance/hooks* && "$hp" != *verasic-github-governance/hooks* ]]; then
+    echo "doctor: WARN — core.hooksPath=$hp may bypass the git hook gate"
+    warn+=("core.hooksPath conflict")
   fi
 else
   hp="$(git config core.hooksPath 2>/dev/null || true)"

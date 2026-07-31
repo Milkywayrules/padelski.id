@@ -14,20 +14,31 @@ COPY packages/email/package.json ./packages/email/
 COPY packages/env/package.json ./packages/env/
 COPY packages/ui/package.json ./packages/ui/
 COPY packages/ws-protocol/package.json ./packages/ws-protocol/
-RUN bun install --frozen-lockfile
+# Skip root "prepare" (lefthook/git hooks) — git is absent in Alpine.
+RUN bun install --frozen-lockfile --ignore-scripts
 
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+# Interim: public URLs cross Docker build boundary until /v1/config client bootstrap (ADR-0002).
+ARG NEXT_PUBLIC_APP_URL
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 RUN bun run build --filter=@padelski/web
 RUN mkdir -p apps/web/public
 
 FROM base AS runner
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-COPY --from=builder /app/apps/web/.next/standalone ./
-COPY --from=builder /app/apps/web/.next/static ./apps/web/.next/static
-COPY --from=builder /app/apps/web/public ./apps/web/public
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+WORKDIR /app
+COPY --from=builder --chown=bun:bun /app/apps/web/.next/standalone ./
+COPY --from=builder --chown=bun:bun /app/apps/web/.next/static ./apps/web/.next/static
+COPY --from=builder --chown=bun:bun /app/apps/web/public ./apps/web/public
+USER bun
 EXPOSE 3000
 CMD ["bun", "run", "apps/web/server.js"]

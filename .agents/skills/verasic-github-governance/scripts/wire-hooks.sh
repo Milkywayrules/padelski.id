@@ -10,6 +10,7 @@ if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
 fi
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 cd "$REPO_ROOT"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 REPO_GOV_HOOKS=".github/verasic-governance/hooks"
 
@@ -81,7 +82,6 @@ done
 
 if [[ -n "$lefthook_file" ]]; then
   gov_ok=1
-  grep -q '\.github/verasic-governance/hooks/pre-push' "$lefthook_file" || gov_ok=0
   grep -q '\.github/verasic-governance/hooks/pre-commit' "$lefthook_file" || gov_ok=0
 
   if [[ "$gov_ok" -eq 0 ]]; then
@@ -113,6 +113,16 @@ EOF
   echo "wire-hooks: lefthook uses repo-local governance hooks ($lefthook_file)"
   if command -v lefthook >/dev/null 2>&1; then
     lefthook install >/dev/null 2>&1 || true
+    gate_script=""
+    for p in "$REPO_ROOT/scripts/governance/ensure-pre-push-gate.sh" "$SCRIPT_DIR/ensure-pre-push-gate.sh"; do
+      [[ -f "$p" ]] && gate_script="$p" && break
+    done
+    if [[ -n "$gate_script" ]]; then
+      bash "$gate_script"
+    else
+      echo "wire-hooks: ensure-pre-push-gate.sh missing — copy from verasic-github-governance/scripts/" >&2
+      exit 3
+    fi
   else
     echo "wire-hooks: run 'lefthook install' when lefthook is available"
   fi

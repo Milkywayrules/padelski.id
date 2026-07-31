@@ -11,5 +11,7 @@ for cmd in doppler docker; do
   fi
 done
 
+export DOCKER_BUILDKIT=1
+
 doppler run -- bun run doppler:validate
-exec doppler run -- docker compose up -d --wait --remove-orphans "$@"
+exec doppler run -- docker compose build "$@"

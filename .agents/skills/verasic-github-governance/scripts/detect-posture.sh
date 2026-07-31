@@ -117,9 +117,13 @@ for f in lefthook.yml .lefthook.yml; do
   [[ -f "$f" ]] && lefthook_file="$f" && break
 done
 if [[ -n "$lefthook_file" ]]; then
-  if grep -q '\.github/verasic-governance/hooks/pre-push' "$lefthook_file" \
-     && grep -q '\.github/verasic-governance/hooks/pre-commit' "$lefthook_file"; then
-    :
+  if grep -q '\.github/verasic-governance/hooks/pre-commit' "$lefthook_file"; then
+    pre_push_hook="$(git rev-parse --git-path hooks/pre-push 2>/dev/null || echo .git/hooks/pre-push)"
+    if [[ -f "$pre_push_hook" ]] && grep -qF 'verasic-governance: pre-push gate' "$pre_push_hook"; then
+      :
+    else
+      soft_missing+=("pre-push gate")
+    fi
   else
     soft_missing+=("lefthook governance hooks")
   fi
@@ -194,8 +198,20 @@ if [[ "$protection_rc" -eq 0 && -n "$protection_out" && "$protection_out" != *'"
     has_pr=1
   fi
   if [[ "$has_ci" -eq 1 && "$has_pr" -eq 1 ]]; then
+    enforce_admins=0
+    if command -v jq >/dev/null 2>&1; then
+      if jq -e '.enforce_admins.enabled == true' <<<"$protection_json" >/dev/null 2>&1; then
+        enforce_admins=1
+      fi
+    elif grep -q '"enforce_admins"' <<<"$protection_json" && grep -qE '"enforce_admins"[^}]*"enabled"[[:space:]]*:[[:space:]]*true' <<<"$protection_json"; then
+      enforce_admins=1
+    fi
     POSTURE="hard-applied"
-    POSTURE_REASON="branch protection active with PR reviews and required check ci"
+    if [[ "$enforce_admins" -eq 1 ]]; then
+      POSTURE_REASON="branch protection active with PR gate, required check ci, enforce_admins"
+    else
+      POSTURE_REASON="branch protection active with PR reviews and required check ci (enforce_admins off — admins can bypass)"
+    fi
     emit
   fi
   BRANCH_PROTECTION="partial"

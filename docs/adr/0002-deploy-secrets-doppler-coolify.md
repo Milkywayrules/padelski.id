@@ -16,6 +16,7 @@ flowchart TB
     COOL[Coolify v4.1.2 on VPS]
     TOK[DOPPLER_TOKEN only in Coolify]
     UP["scripts/coolify/up.sh\n doppler run -- docker compose up"]
+    BUILD["scripts/coolify/build.sh\n doppler run -- docker compose build"]
     PG[(postgres)]
     RD[(redis)]
     API[api]
@@ -24,6 +25,7 @@ flowchart TB
     DOP -->|official sync| GH
     GH --> GHA
     GHA -->|lint test build deploy trigger only| COOL
+    DOP --> TOK --> COOL --> BUILD
     DOP --> TOK --> COOL --> UP
     UP --> PG
     UP --> RD
@@ -39,16 +41,17 @@ Coolify stores **only** `DOPPLER_TOKEN` (service token). Deploy/start wraps the 
 doppler run -- docker compose up -d
 ```
 
-Implemented as `scripts/coolify/up.sh`. Postgres, Redis, web, and api all receive env vars from the same Doppler config fetch — no per-service secret UI in Coolify.
+Implemented as `scripts/coolify/up.sh`. Image build uses `scripts/coolify/build.sh` with the same Doppler injection. Postgres, Redis, web, and api receive env vars only through explicit `environment:` entries in `docker-compose.yml` (Doppler Option 2) — the host shell from `doppler run` does not automatically reach containers.
 
 | Piece | Behavior |
 | --- | --- |
-| **Coolify** | v4.1.2 · Docker Compose build pack · custom start via repo script |
-| **Doppler CLI** | On VPS host or wrapper image · fetches at deploy/restart |
+| **Coolify** | v4.1.2 · Docker Compose build pack · custom **build** via `bash scripts/coolify/build.sh --pull` · custom **start** via `bash scripts/coolify/up.sh -d` |
+| **Doppler CLI** | On VPS host · fetches at build and deploy/restart |
 | **GHA** | CI via Doppler↔GitHub sync for tests · deploy webhook/trigger only |
 | **Fallback volume** | Skipped — Doppler down + restart = fail until recovered |
+| **Smoke** | `bash scripts/coolify/smoke.sh` after up (health, config, web root) |
 
-**Phase 0.5 checklist:** Doppler CLI on host · Preserve Repository + correct project directory · `t3-env` validates after inject · smoke test on VPS.
+**Phase 0.5 checklist:** Doppler CLI on host · Preserve Repository + correct project directory · `t3-env` validates after inject · `build.sh` then `up.sh` then `smoke.sh` on VPS.
 
 ## Environment matrix
 
@@ -75,14 +78,20 @@ flowchart LR
     GUARD --> RUN
 ```
 
-## Runtime config — not NEXT_PUBLIC
+## Runtime config — not NEXT_PUBLIC (long-term)
 
-Do **not** bake env-specific values into `NEXT_PUBLIC_*` at build time. Same image runs everywhere; env-specific public config comes from:
+Do **not** bake env-specific values into `NEXT_PUBLIC_*` at build time long-term. Same image runs everywhere; env-specific public config should come from:
 
 - Server-injected config, or
 - `/v1/config` runtime endpoint
 
-Secrets and env-specific URLs stay server-side. `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_APP_URL` are set at runtime via Doppler — not compile-time prod secrets.
+### Interim deviation (2026-07-31)
+
+Until `/v1/config` client bootstrap ships, the web Dockerfile accepts `NEXT_PUBLIC_APP_URL` and `NEXT_PUBLIC_API_URL` as **build args** (injected by `doppler run -- docker compose build`). Consequence: the web image is **environment-specific** — a dev-built image must not be promoted to prod. Runtime `environment:` on the web service still passes the same keys for server-side reads; they do not rewrite an already-built client bundle.
+
+Remove this deviation when the web client loads public URLs from `/v1/config` (or equivalent) and build args are deleted from compose + Dockerfile.
+
+Secrets stay server-side at runtime via compose `environment:` passthrough. Never set `ENV_SKIP_VALIDATION` or `CI=true` in Docker or compose — both disable t3-env fail-fast guards.
 
 ## Auth URL mirrors (Elysia, not Next API)
 
@@ -119,6 +128,8 @@ Scripts: `doppler:setup`, `doppler:validate`, `doppler:clear` (wipe config for r
 
 ## Consequences
 
-- Next.js builds must not depend on prod-only public env at compile time.
-- Coolify must allow custom compose start command (verified feasible on v4.1.2; confirm on VPS in 0.5).
+- Next.js builds currently depend on interim build-time `NEXT_PUBLIC_*` (see Interim deviation); remove when `/v1/config` lands.
+- Compose `environment:` must list every Doppler key each container needs — updating `packages/env/src/manifest.ts` requires updating compose.
+- Coolify custom build and start commands required (verified feasible on v4.1.2; confirm on VPS in 0.5).
+- Postgres and Redis are internal-only (no host port publish) in deploy compose.
 - Local dev: `doppler run --config dev_personal -- bun dev` (or equivalent).

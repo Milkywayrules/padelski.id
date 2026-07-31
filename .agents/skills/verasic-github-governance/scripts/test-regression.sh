@@ -74,11 +74,21 @@ assert "bootstrap copies repo-local hooks" \
 assert "bootstrap idempotent" \
   "bash $BOOT >/dev/null 2>&1; test \$(grep -c '^# Contributing' CONTRIBUTING.md) -eq 1"
 
-assert "lefthook uses repo-local paths" \
-  "grep -q '$REPO_HOOKS/pre-push' lefthook.yml && grep -q '$REPO_HOOKS/pre-commit' lefthook.yml"
+assert "lefthook uses repo-local pre-commit hook" \
+  "grep -q '$REPO_HOOKS/pre-commit' lefthook.yml"
 
-assert "doctor passes with lefthook.yml" \
-  "test -f lefthook.yml && bash .cursor/skills/verasic-github-governance/scripts/doctor.sh; rc=\$?; [[ \$rc -eq 0 ]]"
+assert "pre-push gate script present" \
+  "test -x .cursor/skills/verasic-github-governance/scripts/ensure-pre-push-gate.sh"
+
+assert "doctor fails before wire-hooks" \
+  "bash .cursor/skills/verasic-github-governance/scripts/doctor.sh >/dev/null 2>&1; rc=\$?; [[ \$rc -eq 2 ]]"
+
+if command -v lefthook >/dev/null 2>&1; then
+  assert "doctor passes after wire-hooks" \
+    "bash .cursor/skills/verasic-github-governance/scripts/wire-hooks.sh >/dev/null && bash .cursor/skills/verasic-github-governance/scripts/doctor.sh >/dev/null; rc=\$?; [[ \$rc -eq 0 ]]"
+else
+  echo "SKIP: lefthook not installed — doctor after wire-hooks"
+fi
 
 assert "wire-hooks wires commit-msg when skill present" \
   "bash .cursor/skills/verasic-github-governance/scripts/wire-hooks.sh >/dev/null && grep -q '.cursor/skills/verasic-git-commits-convention/hooks/commit-msg' lefthook.yml"
@@ -114,10 +124,19 @@ git config user.name t
 echo ok > README.md
 git add README.md
 git commit -qm 'chore: seed'
-assert_fail "pre-push blocks main" \
+assert_fail "pre-push blocks main via remote ref" \
   "printf '%s\n' 'refs/heads/main abc refs/heads/main def' | bash $REPO_HOOKS/pre-push origin git@github.com:x/y.git"
 
-assert "pre-push bypass allows main" \
+assert_fail "pre-push blocks feature:main refspec" \
+  "printf '%s\n' 'refs/heads/feat/x abc refs/heads/main def' | bash $REPO_HOOKS/pre-push origin git@github.com:x/y.git"
+
+assert_fail "pre-push blocks delete main" \
+  "printf '%s\n' '(delete) abc refs/heads/main def' | bash $REPO_HOOKS/pre-push origin git@github.com:x/y.git"
+
+assert_fail "pre-push fail-closed on empty stdin" \
+  "bash $REPO_HOOKS/pre-push origin git@github.com:x/y.git </dev/null"
+
+assert "pre-push bypass allows empty stdin" \
   "VERASIC_GOVERNANCE_BYPASS=1 bash $REPO_HOOKS/pre-push origin git@github.com:x/y.git </dev/null"
 
 git checkout -q -b feat/ok

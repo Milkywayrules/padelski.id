@@ -14,16 +14,19 @@ COPY packages/email/package.json ./packages/email/
 COPY packages/env/package.json ./packages/env/
 COPY packages/ui/package.json ./packages/ui/
 COPY packages/ws-protocol/package.json ./packages/ws-protocol/
-RUN bun install --frozen-lockfile
+# Skip root "prepare" (lefthook/git hooks) — git is absent in Alpine.
+RUN bun install --frozen-lockfile --ignore-scripts
 
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+ENV NODE_ENV=production
 RUN bun run build --filter=@padelski/api
 
 FROM base AS runner
 ENV NODE_ENV=production
-COPY --from=builder /app/apps/api/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
+WORKDIR /app
+COPY --from=builder --chown=bun:bun /app/apps/api/dist ./dist
+USER bun
 EXPOSE 3001
 CMD ["bun", "run", "dist/index.js"]
