@@ -24,7 +24,10 @@
   },
   "dependencies": {
     "@casl/ability": "^6.7.3",
+    "@padelski/db": "workspace:*",
+    "@padelski/email": "workspace:*",
     "better-auth": "^1.2.8",
+    "drizzle-orm": "^0.43.1",
     "zod": "^3.25.28"
   },
   "devDependencies": {
