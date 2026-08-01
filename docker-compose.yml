@@ -48,6 +48,20 @@ services:
       timeout: 5s
       retries: 5
 
+  # PR previews and fresh volumes start with an empty Postgres — without a one-shot migrate
+  # job the API would boot against a schemaless database and fail at runtime.
+  migrate:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      target: migrate
+    restart: "no"
+    environment:
+      DB_URL: postgresql://padelski:${SERVICE_PASSWORD_POSTGRES:?}@postgres:5432/padelski
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   api:
     build:
       context: .
@@ -77,13 +91,15 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
     healthcheck:
       test:
         [
           "CMD",
           "bun",
           "-e",
-          "fetch('http://127.0.0.1:3001/v1/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+          "fetch('http://127.0.0.1:3001/v1/ready').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
         ]
       interval: 10s
       timeout: 5s

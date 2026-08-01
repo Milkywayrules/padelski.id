@@ -23,3 +23,7 @@ COPY --from=builder --chown=bun:bun /app/apps/api/dist ./dist
 USER bun
 EXPOSE 3001
 CMD ["doppler", "run", "--", "bun", "dist/index.js"]
+
+FROM builder AS migrate
+WORKDIR /app/packages/db
+CMD ["bun", "run", "db:migrate"]
