@@ -198,6 +198,6 @@ export const configRoutes = new Elysia({ prefix: "/config" }).get("/", () => ({
   wsProtocolVersion: "v1" as const,
   features: {
     githubOAuth: Boolean(process.env["OAUTH_GITHUB_CLIENT_ID"]),
-    emailPassword: true,
+    emailPassword: false,
   },
 }));
