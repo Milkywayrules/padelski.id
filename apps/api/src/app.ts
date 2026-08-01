@@ -42,7 +42,7 @@ function createAuthInstance() {
     trustedOrigins: [skipValidation ? corsOrigin : serverEnv.API_CORS_ORIGIN],
     githubClientId,
     githubClientSecret,
-    enableEmailPassword: false,
+    enableEmailPassword: true,
   });
 }
 

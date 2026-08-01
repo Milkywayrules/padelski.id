@@ -39,7 +39,7 @@
 | E4-S1 Better Auth Drizzle adapter | Persist sessions/users; link `players.user_id` on OAuth signup |
 | E4-S2 GitHub OAuth login UI | Web sign-in button; callback creates/links Player |
 | E4-S3 CASL route guards | API checks organizer/participant/spectator abilities per ADR |
-| E4-S4 Email/password stub | Enable when `enableEmailPassword=true`; dev-only flag |
+| E4-S4 Email/password auth | Sign-up/sign-in via Better Auth `emailAndPassword`; enabled in MVP |
 
 ## Epic E5 — Player profile & stats
 
