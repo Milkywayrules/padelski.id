@@ -1,4 +1,9 @@
-Harden the current code changes for production readiness.
+---
+name: harden
+description: Raise current code changes to production readiness — quality improvements, diff simplification, then verification. Use when the user asks to harden changes, polish before merge, or production-readiness on the current diff.
+---
+
+# Harden — production readiness on current changes
 
 ## First line (required)
 
@@ -24,3 +29,13 @@ Your first line to the human must acknowledge that you will respect the repo eco
 ## Reporting
 
 Report back to the human only when pre-work, work, and post-work are all complete and you are confident in the outcome. Do not send interim status updates unless blocked and needing a decision.
+
+## vs offload
+
+|                 | **offload**                    | **harden**                              |
+| --------------- | ------------------------------ | --------------------------------------- |
+| Purpose         | move dirty work off main chat  | production-readiness on current changes |
+| Where work runs | subagents (disposable context) | main agent (or subagent you choose)     |
+| Done gate       | verifier + scope-widening      | tests/lint/smoke on the diff            |
+
+Use both when needed: offload implementation, then harden before merge.
