@@ -20,7 +20,9 @@ Offload when work is context-heavy, verbose, or disposable — not when ≤2 tri
 ## L0 constraints
 
 - Match repo conventions; no scope creep or drive-by refactors.
-- No commit, push, or GitHub mutation unless the user explicitly scoped it in `scope-in`.
+- Never push to `main` — feature branches and PR only.
+- No commit, push, or GitHub mutation unless the user explicitly scoped it in `scope-in` **and** confirmed in main chat.
+- `gh-governor` spawns require explicit human confirmation in main chat before spawn.
 - Do not dump subagent tool narration into the human chat.
 - Pair with `/harden` when production polish is needed after offload work lands.
 

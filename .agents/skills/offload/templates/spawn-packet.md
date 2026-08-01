@@ -13,4 +13,13 @@ relay-to: main | parent
 
 Then paste `templates/layer-rules.txt` verbatim.
 
+Then paste this governance block verbatim:
+
+```text
+## governance
+- never push to main — feature branches and PR only
+- no commit, push, or gh mutation unless scope-in explicitly includes it AND human confirmed in main chat
+- gh-governor spawns require explicit human confirmation in main chat before spawn
+```
+
 Then the task body: goal, current state, constraints, deliverable per `references/relay-contract.md`.

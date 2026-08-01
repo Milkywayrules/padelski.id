@@ -21,6 +21,13 @@
         "command": "python3 /home/dio--ubuntu/dio/_koding/project/verasic-lab/padelski.id/.bmad-loop/bmad_loop_hook.py SessionEnd",
         "timeoutSec": 60
       }
+    ],
+    "subagentStart": [
+      {
+        "type": "command",
+        "command": "bash .cursor/hooks/validate-offload-spawn.sh",
+        "timeoutSec": 5
+      }
     ]
   }
 }
