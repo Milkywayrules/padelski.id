@@ -1,0 +1,5 @@
+Layer rules:
+- human → L0 (main agent) → L1 (parent subagent) → L2 (child subagent)
+- if your `layer` = L1: you CAN spawn subagents (Task tool — preferable but costly) for dirty work (exploration, helpers, verify against official docs, etc.) OR do all work yourself
+- if your `layer` = L2: you MUST do all work yourself — you CANNOT spawn subagents (Task tool)
+- relay results upstream; do not talk to the human unless blocked
