@@ -49,7 +49,7 @@ Implemented as `scripts/coolify/up.sh`. Image build uses `scripts/coolify/build.
 | **Doppler CLI** | Host `doppler` or `bunx doppler` in Coolify helper (`scripts/coolify/ensure-doppler.sh`) · fetches at build and deploy/restart |
 | **GHA** | CI via Doppler↔GitHub sync for tests · deploy webhook/trigger only |
 | **Fallback volume** | Skipped — Doppler down + restart = fail until recovered |
-| **Smoke** | Chained at end of `scripts/coolify/up.sh` (health, config, web root). Auto-detects **loopback** (local host) vs **compose-exec** (Coolify helper — published ports are on Docker host, not helper loopback). Override with `SMOKE_MODE=loopback\|compose-exec`. |
+| **Smoke** | Chained at end of `scripts/coolify/up.sh` (health, config, web root). Auto-detects **loopback** (local host) vs **compose-exec** (Coolify helper — discovers `api`/`api-pr-N` service names; published ports are on Docker host, not helper loopback). Override with `SMOKE_MODE=loopback\|compose-exec`. |
 
 **Phase 0.5 checklist:** Doppler CLI on host · Preserve Repository + correct project directory · `t3-env` validates after inject · `build.sh` then `up.sh` on VPS (smoke runs at end of up).
 
