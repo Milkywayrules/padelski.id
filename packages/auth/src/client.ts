@@ -1,5 +1,4 @@
-import { inferAdditionalFields } from "better-auth/client/plugins";
-import { organizationClient } from "better-auth/client/plugins";
+import { inferAdditionalFields, organizationClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 
 /** Auth API root — Better Auth routes live at `{baseURL}/v1/auth` on Elysia. */
