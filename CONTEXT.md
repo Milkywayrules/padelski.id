@@ -56,6 +56,20 @@ _Avoid_: viewer, audience, observer
 An append-only, ephemeral log entry recording who tapped what during live scoring (+1, −1, type, undo). Purged when the PlaySession is archived; Match result remains.
 _Avoid_: activity log, match log, audit log (for ScoreEvent specifically)
 
+**Activity log**:
+Durable Postgres append-only record of domain events for product timelines — who did what on a PlaySession (created, activated, SlotClaim requested, and similar). Shown in session UI under `/app/play-sessions/*` to Organizer and in-scope Participants.
+_Avoid_: audit trail, audit log, ScoreEvent, platform-admin log
+
+**Audit trail**:
+Append-only Postgres record of PlatformAdmin and security-sensitive support actions (detach, cross-tenant support, auth elevation). Shown only at `/app/platform-admin/audit` — PlatformAdmin scope.
+_Avoid_: activity log, ScoreEvent, org admin log, `/admin` route segment
+
+**auditFields**:
+Mandatory `createdBy` and `updatedBy` FK columns to users on every domain table. ScoreEvent uses `actorSlotId` for the scoring actor instead — see [ADR-0005](./docs/adr/0005-activity-and-audit-logs.md).
+_Avoid_: audit trail, activity log (for row-level columns)
+
+Platform operator UI (PlatformAdmin) lives under the **`/app/platform-admin/*`** route segment — not `/admin` and not Org-scoped admin paths.
+
 ## Scope
 
 **Platform scope**:
