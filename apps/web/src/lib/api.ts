@@ -1,4 +1,10 @@
-const API_BASE = process.env["NEXT_PUBLIC_API_URL"] ?? "http://localhost:3001/v1";
+// NEXT_PUBLIC_API_URL is a bare origin with no path; every consumer appends the API's
+// `/v1` prefix itself, matching getWsUrl below and createPadelskiAuthClient.
+const API_ORIGIN = (process.env["NEXT_PUBLIC_API_URL"] ?? "http://localhost:3001").replace(
+  /\/+$/,
+  "",
+);
+const API_BASE = `${API_ORIGIN}/v1`;
 
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, {
