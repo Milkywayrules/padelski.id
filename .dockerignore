@@ -27,3 +27,9 @@ lefthook.yml
 apps/api/dist
 apps/web/.next
 .vscode
+.github-agent.local
+.github-agent.local.example
+.envrc
+_bmad
+playwright
+skills-lock.json
