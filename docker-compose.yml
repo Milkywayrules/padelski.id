@@ -80,7 +80,8 @@ services:
       dockerfile: apps/api/Dockerfile
     restart: unless-stopped
     <<: *app-hardening
-    # No host ports — Coolify proxy routes by domain; fixed loopback ports break concurrent PR previews.
+    # Block Coolify-injected 127.0.0.1:3001 host binds (shared across previews); proxy routes by domain.
+    ports: !reset []
     expose:
       - "3001"
     environment:
@@ -122,6 +123,7 @@ services:
     tmpfs:
       - /tmp
       - /app/apps/web/.next/cache:uid=1000,gid=1000,mode=0755
+    ports: !reset []
     expose:
       - "3000"
     environment:
