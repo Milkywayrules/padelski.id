@@ -23,7 +23,9 @@ services:
       - no-new-privileges:true
     environment:
       POSTGRES_USER: padelski
-      POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
+      # Required, not defaulted: an empty value makes postgres refuse to initialise a fresh
+      # volume, which surfaces as "container is unhealthy" instead of naming the real cause.
+      POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES:?}
       POSTGRES_DB: padelski
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -60,14 +62,16 @@ services:
       NODE_ENV: production
       APP_ENV: ${APP_ENV:-production}
       PORT: "3001"
-      DB_URL: postgresql://padelski:${SERVICE_PASSWORD_POSTGRES}@postgres:5432/padelski
+      DB_URL: postgresql://padelski:${SERVICE_PASSWORD_POSTGRES:?}@postgres:5432/padelski
       REDIS_URL: redis://redis:6379
       OTEL_SERVICE_NAME: padelski-api
       # Per-deployment URLs: each PR preview gets a generated subdomain no secret store can know.
-      NEXT_PUBLIC_API_URL: ${SERVICE_URL_API_3001}
-      NEXT_PUBLIC_APP_URL: ${SERVICE_URL_WEB_3000}
-      BETTER_AUTH_URL: ${SERVICE_URL_API_3001}
-      API_CORS_ORIGIN: ${SERVICE_URL_WEB_3000}
+      # Coolify injects SERVICE_URL_<SERVICE> (no port suffix) from the domain set in its UI; the
+      # port lives in that domain field and is not part of the public origin.
+      NEXT_PUBLIC_API_URL: ${SERVICE_URL_API:?}
+      NEXT_PUBLIC_APP_URL: ${SERVICE_URL_WEB:?}
+      BETTER_AUTH_URL: ${SERVICE_URL_API:?}
+      API_CORS_ORIGIN: ${SERVICE_URL_WEB:?}
     depends_on:
       postgres:
         condition: service_healthy
@@ -91,8 +95,8 @@ services:
       context: .
       dockerfile: apps/web/Dockerfile
       args:
-        NEXT_PUBLIC_APP_URL: ${SERVICE_URL_WEB_3000}
-        NEXT_PUBLIC_API_URL: ${SERVICE_URL_API_3001}
+        NEXT_PUBLIC_APP_URL: ${SERVICE_URL_WEB:?}
+        NEXT_PUBLIC_API_URL: ${SERVICE_URL_API:?}
     restart: unless-stopped
     <<: *app-hardening
     tmpfs:
@@ -102,8 +106,8 @@ services:
       NODE_ENV: production
       PORT: "3000"
       HOSTNAME: "0.0.0.0"
-      NEXT_PUBLIC_API_URL: ${SERVICE_URL_API_3001}
-      NEXT_PUBLIC_APP_URL: ${SERVICE_URL_WEB_3000}
+      NEXT_PUBLIC_API_URL: ${SERVICE_URL_API:?}
+      NEXT_PUBLIC_APP_URL: ${SERVICE_URL_WEB:?}
     depends_on:
       api:
         condition: service_healthy
