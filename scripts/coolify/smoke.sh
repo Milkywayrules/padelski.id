@@ -31,6 +31,63 @@ discover_service() {
   printf '%s' "${out%%$'\n'*}"
 }
 
+compose_merged_config() {
+  docker compose config 2>/dev/null || true
+}
+
+is_preview_deploy() {
+  [[ "${API_SERVICE:-}" =~ -pr-[0-9]+$ ]]
+}
+
+discover_traefik_host_for_role() {
+  local role="$1"
+  local config=""
+  config="$(compose_merged_config)"
+  [[ -z "$config" ]] && return 0
+
+  printf '%s\n' "$config" \
+    | grep -E "traefik\.http\.routers\.[^:]*${role}[^:]*\.rule: Host\(\`" \
+    | sed -n 's/.*Host(\`\([^`]*\)\`).*/\1/p' \
+    | head -1
+}
+
+to_public_base() {
+  local host_or_url="$1"
+  if [[ "$host_or_url" =~ ^https?:// ]]; then
+    printf '%s' "${host_or_url%/}"
+  else
+    printf 'https://%s' "${host_or_url%/}"
+  fi
+}
+
+resolve_public_api_base() {
+  if [[ -n "${SERVICE_URL_API_3001:-}" ]]; then
+    to_public_base "${SERVICE_URL_API_3001}"
+    return
+  fi
+  if [[ -n "${SMOKE_PUBLIC_API_URL:-}" ]]; then
+    to_public_base "${SMOKE_PUBLIC_API_URL%/v1/health}"
+    return
+  fi
+  local host=""
+  host="$(discover_traefik_host_for_role api)"
+  [[ -n "$host" ]] && to_public_base "$host"
+}
+
+resolve_public_web_base() {
+  if [[ -n "${SERVICE_URL_WEB_3000:-}" ]]; then
+    to_public_base "${SERVICE_URL_WEB_3000}"
+    return
+  fi
+  if [[ -n "${SMOKE_PUBLIC_WEB_URL:-}" ]]; then
+    to_public_base "${SMOKE_PUBLIC_WEB_URL%/}"
+    return
+  fi
+  local host=""
+  host="$(discover_traefik_host_for_role web)"
+  [[ -n "$host" ]] && to_public_base "$host"
+}
+
 API_SERVICE="${SMOKE_API_SERVICE:-$(discover_service api)}"
 WEB_SERVICE="${SMOKE_WEB_SERVICE:-$(discover_service web)}"
 
@@ -116,7 +173,9 @@ public_url_enabled() {
     always) return 0 ;;
     never) return 1 ;;
     auto)
-      [[ -n "${SERVICE_URL_API_3001:-}" || -n "${SERVICE_URL_WEB_3000:-}" ]]
+      [[ -n "${SERVICE_URL_API_3001:-}" || -n "${SERVICE_URL_WEB_3000:-}" ]] && return 0
+      is_preview_deploy && return 0
+      return 1
       ;;
     *)
       echo "smoke failed: unknown SMOKE_PUBLIC_URLS=$SMOKE_PUBLIC_URLS" >&2
@@ -166,16 +225,28 @@ check_public_urls() {
     return 1
   fi
 
-  echo "smoke public: enabled"
+  local api_base web_base
+  api_base="$(resolve_public_api_base || true)"
+  web_base="$(resolve_public_web_base || true)"
 
-  if [[ -n "${SERVICE_URL_API_3001:-}" || -n "${SMOKE_PUBLIC_API_URL:-}" ]]; then
-    local api_public="${SMOKE_PUBLIC_API_URL:-$(join_url "${SERVICE_URL_API_3001:-}" /v1/health)}"
-    wait_for_public "$api_public" "api health public"
+  if is_preview_deploy && [[ -z "$api_base" && -z "$web_base" ]]; then
+    echo "smoke failed: preview deploy but no public URLs (SERVICE_URL_* unset and no traefik Host rules in compose config)" >&2
+    return 1
   fi
 
-  if [[ -n "${SERVICE_URL_WEB_3000:-}" || -n "${SMOKE_PUBLIC_WEB_URL:-}" ]]; then
-    local web_public="${SMOKE_PUBLIC_WEB_URL:-$(join_url "${SERVICE_URL_WEB_3000:-}" /)}"
-    wait_for_public "$web_public" "web root public"
+  if [[ -z "$api_base" && -z "$web_base" ]]; then
+    echo "smoke public: skipped (no public URL sources)"
+    return 0
+  fi
+
+  echo "smoke public: enabled (api=${api_base:-none} web=${web_base:-none})"
+
+  if [[ -n "$api_base" ]]; then
+    wait_for_public "$(join_url "$api_base" /v1/health)" "api health public"
+  fi
+
+  if [[ -n "$web_base" ]]; then
+    wait_for_public "$(join_url "$web_base" /)" "web root public"
   fi
 }
 
