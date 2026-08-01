@@ -1,6 +1,6 @@
 import { cors } from "@elysiajs/cors";
 import { openapi } from "@elysiajs/openapi";
-import { createAuth } from "@padelski/auth";
+import { createServerAuth } from "@padelski/auth/server";
 import { serverEnv } from "@padelski/env/server";
 import { Elysia } from "elysia";
 import { z } from "zod";
@@ -19,47 +19,15 @@ const healthSchema = z.object({
   version: z.literal("v1"),
 });
 
-function createAuthInstance() {
-  const skipValidation =
-    process.env["ENV_SKIP_VALIDATION"] === "true" || process.env["CI"] === "true";
-
-  const secret = process.env["BETTER_AUTH_SECRET"] ?? "change-me-in-production-min-32-chars!!";
-  const apiPublicUrl =
-    process.env["BETTER_AUTH_URL"] ?? process.env["NEXT_PUBLIC_API_URL"] ?? "http://localhost:3001";
-  const corsOrigin =
-    process.env["API_CORS_ORIGIN"] ?? process.env["NEXT_PUBLIC_APP_URL"] ?? "http://localhost:3000";
-
-  const githubClientId = skipValidation
-    ? process.env["OAUTH_GITHUB_CLIENT_ID"]
-    : serverEnv.OAUTH_GITHUB_CLIENT_ID;
-  const githubClientSecret = skipValidation
-    ? process.env["OAUTH_GITHUB_CLIENT_SECRET"]
-    : serverEnv.OAUTH_GITHUB_CLIENT_SECRET;
-
-  return createAuth({
-    secret: skipValidation ? secret : serverEnv.BETTER_AUTH_SECRET,
-    baseURL: `${skipValidation ? apiPublicUrl : serverEnv.BETTER_AUTH_URL}/v1/auth`,
-    trustedOrigins: [skipValidation ? corsOrigin : serverEnv.API_CORS_ORIGIN],
-    githubClientId,
-    githubClientSecret,
-    enableEmailPassword: false,
-  });
-}
-
 export function createApp() {
-  const skipValidation =
-    process.env["ENV_SKIP_VALIDATION"] === "true" || process.env["CI"] === "true";
-  const corsOrigin =
-    process.env["API_CORS_ORIGIN"] ?? process.env["NEXT_PUBLIC_APP_URL"] ?? "http://localhost:3000";
-
   const tracer = initTelemetry();
-  const auth = createAuthInstance();
+  const auth = createServerAuth();
 
   const app = new Elysia({ prefix: "/v1" })
     .use(
       cors({
         credentials: true,
-        origin: skipValidation ? corsOrigin : serverEnv.API_CORS_ORIGIN,
+        origin: serverEnv.API_CORS_ORIGIN,
       }),
     )
     .use(

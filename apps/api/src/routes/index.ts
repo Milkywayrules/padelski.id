@@ -1,3 +1,4 @@
+import { serverEnv } from "@padelski/env/server";
 import { Elysia } from "elysia";
 import { getDb } from "../db";
 import {
@@ -193,11 +194,11 @@ export const playerRoutes = new Elysia({ prefix: "/players" })
   });
 
 export const configRoutes = new Elysia({ prefix: "/config" }).get("/", () => ({
-  appEnv: (process.env["APP_ENV"] as "dev" | "prod") ?? "dev",
+  appEnv: serverEnv.APP_ENV,
   apiVersion: "v1" as const,
   wsProtocolVersion: "v1" as const,
   features: {
-    githubOAuth: Boolean(process.env["OAUTH_GITHUB_CLIENT_ID"]),
+    githubOAuth: Boolean(serverEnv.OAUTH_GITHUB_CLIENT_ID),
     emailPassword: false,
   },
 }));

@@ -95,6 +95,7 @@
       "version": "0.0.0",
       "dependencies": {
         "@casl/ability": "^6.7.3",
+        "@padelski/env": "workspace:*",
         "better-auth": "^1.2.8",
         "zod": "^3.25.28",
       },

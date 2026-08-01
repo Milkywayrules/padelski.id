@@ -12,6 +12,10 @@
       "types": "./src/client.ts",
       "default": "./src/client.ts"
     },
+    "./server": {
+      "types": "./src/server.ts",
+      "default": "./src/server.ts"
+    },
     "./abilities": {
       "types": "./src/abilities.ts",
       "default": "./src/abilities.ts"
@@ -23,6 +27,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@padelski/env": "workspace:*",
     "@casl/ability": "^6.7.3",
     "better-auth": "^1.2.8",
     "zod": "^3.25.28"
