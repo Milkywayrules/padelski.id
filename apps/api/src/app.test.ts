@@ -15,6 +15,30 @@ const readySchema = z.object({
   version: z.literal("v1"),
 });
 
+describe("Docker image target regression guard", () => {
+  it("keeps runner as the Dockerfile's final stage", () => {
+    const dockerfilePath = join(process.cwd(), "Dockerfile");
+    const dockerfile = readFileSync(dockerfilePath, "utf8");
+    const stageNames = [...dockerfile.matchAll(/^\s*FROM\s+\S+\s+as\s+(\w+)/gim)].map(
+      (match) => match[1],
+    );
+
+    expect(stageNames.at(-1)).toBe("runner");
+  });
+
+  it("pins target: runner on the compose api service", () => {
+    const composePath = join(process.cwd(), "..", "..", "docker-compose.yml");
+    const compose = readFileSync(composePath, "utf8");
+    const apiStart = compose.indexOf("\n  api:");
+    const webStart = compose.indexOf("\n  web:");
+    expect(apiStart).toBeGreaterThan(-1);
+    expect(webStart).toBeGreaterThan(apiStart);
+
+    const apiBlock = compose.slice(apiStart, webStart);
+    expect(apiBlock).toMatch(/^\s+target:\s+runner\s*$/m);
+  });
+});
+
 describe("Dockerfile preserve-env drift guard", () => {
   it("lists exactly COMPOSE_WIRED_AT_DEPLOY keys", () => {
     const dockerfilePath = join(process.cwd(), "Dockerfile");

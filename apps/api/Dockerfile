@@ -10,6 +10,11 @@ RUN --mount=type=cache,target=/root/.bun/install/cache \
 ENV NODE_ENV=production
 RUN bun run build --filter=@padelski/api
 
+# runner must stay last: compose api and untargeted builds resolve to the final stage.
+FROM builder AS migrate
+WORKDIR /app/packages/db
+CMD ["bun", "run", "db:migrate"]
+
 FROM base AS runner
 ENV NODE_ENV=production
 ENV PORT=3001
@@ -24,7 +29,3 @@ USER bun
 EXPOSE 3001
 # only compose-owned per-deployment values beat Doppler; Doppler-owned keys like APP_ENV are not shadowed by compose defaults.
 CMD ["doppler", "run", "--preserve-env=DB_URL,REDIS_URL,API_CORS_ORIGIN,BETTER_AUTH_URL,NEXT_PUBLIC_APP_URL,NEXT_PUBLIC_API_URL", "--", "bun", "dist/index.js"]
-
-FROM builder AS migrate
-WORKDIR /app/packages/db
-CMD ["bun", "run", "db:migrate"]
