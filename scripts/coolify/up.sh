@@ -19,33 +19,45 @@ require_doppler_validate "$ROOT"
 # override so main + concurrent PR previews start without host port collisions.
 write_port_strip_override() {
   local compose="$ROOT/docker-compose.yml"
-  local override="$ROOT/docker-compose.coolify-runtime.yml"
+  local override="$ROOT/docker-compose.override.yml"
+  local services=""
 
   if [[ ! -f "$compose" ]]; then
     echo "error: docker-compose.yml not found at $compose" >&2
     exit 1
   fi
 
+  # Prefer parsed service names — Coolify may rename api/web to api-pr-N in the deploy artifact.
+  services="$(
+    docker compose -f "$compose" config --services 2>/dev/null \
+      | grep -E '^(api|web)(-pr-[0-9]+)?$' || true
+  )"
+
+  if [[ -z "$services" ]]; then
+    services="$(
+      grep -E '^  (api|web)(-pr-[0-9]+)?:' "$compose" 2>/dev/null \
+        | sed 's/^  //;s/:$//' || true
+    )"
+  fi
+
+  if [[ -z "$services" ]]; then
+    echo "warn: no api/web compose services — skipping port-strip override" >&2
+    rm -f "$override"
+    return 0
+  fi
+
   {
     echo "services:"
-    grep -E '^  (api|web)(-pr-[0-9]+)?:' "$compose" | sed 's/:$//' | while read -r line; do
-      svc="${line#  }"
+    while IFS= read -r svc; do
+      [[ -z "$svc" ]] && continue
       printf '  %s:\n    ports: !reset []\n' "$svc"
-    done
+    done <<< "$services"
   } > "$override"
 
-  if ! grep -qE '^  (api|web)' "$override"; then
-    echo "warn: no api/web services in compose — skipping port-strip override" >&2
-    rm -f "$override"
-  fi
+  echo "port-strip override for:$(printf ' %s' $services)"
 }
 
 write_port_strip_override
 
-compose_args=(-f docker-compose.yml)
-if [[ -f "$ROOT/docker-compose.coolify-runtime.yml" ]]; then
-  compose_args+=(-f docker-compose.coolify-runtime.yml)
-fi
-
-doppler_run docker compose "${compose_args[@]}" up -d --wait --remove-orphans "$@"
+doppler_run docker compose up -d --wait --remove-orphans "$@"
 bash "$ROOT/scripts/coolify/smoke.sh"
