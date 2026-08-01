@@ -1,11 +1,11 @@
 import { type Database, createDb } from "@padelski/db";
+import { serverEnv } from "@padelski/env/server";
 
 let dbInstance: Database | null = null;
 
 export function getDb(): Database {
   if (!dbInstance) {
-    const url = process.env["DB_URL"] ?? "postgresql://padelski:padelski@localhost:5432/padelski";
-    dbInstance = createDb(url);
+    dbInstance = createDb(serverEnv.DB_URL);
   }
   return dbInstance;
 }
