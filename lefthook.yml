@@ -9,7 +9,7 @@ pre-commit:
       run: bash .github/verasic-governance/hooks/pre-commit
     biome:
       glob: "*.{js,ts,tsx,json,jsonc}"
-      run: bunx biome check --write {staged_files}
+      run: bunx biome check --write --no-errors-on-unmatched {staged_files}
     typecheck:
       run: bun run typecheck
 
