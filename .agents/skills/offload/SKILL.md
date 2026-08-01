@@ -17,7 +17,7 @@ Read `references/protocol.md` and follow it exactly.
 | `references/protocol.md` | L0 orchestration — read once per invoke |
 | `references/spawn-registry.md` | role → spawn-target map |
 | `references/relay-contract.md` | subagent report shape |
-| `references/verifier-protocol.md` | scope-widening audit for done gate |
+| `references/verifier-protocol.md` | done-gate audit checklist (scope-widening and evidence) |
 | `templates/layer-rules.txt` | paste verbatim on every L1/L2 spawn |
 | `templates/spawn-packet.md` | how to build each spawn |
 
