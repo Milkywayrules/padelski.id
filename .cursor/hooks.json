@@ -26,7 +26,8 @@
       {
         "type": "command",
         "command": "bash .cursor/hooks/validate-offload-spawn.sh",
-        "timeoutSec": 5
+        "timeoutSec": 5,
+        "failClosed": true
       }
     ]
   }

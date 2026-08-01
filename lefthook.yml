@@ -8,10 +8,8 @@ pre-commit:
     governance-pre-commit:
       run: bash .github/verasic-governance/hooks/pre-commit
     biome:
-      glob: "**/*.{js,ts,tsx,json,jsonc}"
-      exclude:
-        - ".cursor/hooks.json"
-      run: bunx biome check --write {staged_files}
+      glob: "*.{js,ts,tsx,json,jsonc}"
+      run: bunx biome check --write --no-errors-on-unmatched {staged_files}
     typecheck:
       run: bun run typecheck
 

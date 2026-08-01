@@ -1,4 +1,4 @@
-Paste verbatim at the top of every L1/L2 Task spawn (after layer-rules.txt):
+Build every L1/L2 Task spawn in this order (paste each block verbatim):
 
 ```text
 ## offload-meta
