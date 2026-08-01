@@ -1,3 +1,7 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { COMPOSE_WIRED_AT_DEPLOY } from "@padelski/env/manifest";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 
@@ -9,6 +13,21 @@ const healthSchema = z.object({
 const readySchema = z.object({
   status: z.literal("ready"),
   version: z.literal("v1"),
+});
+
+describe("Dockerfile preserve-env drift guard", () => {
+  it("lists exactly COMPOSE_WIRED_AT_DEPLOY keys", () => {
+    const dockerfilePath = join(process.cwd(), "Dockerfile");
+    const dockerfile = readFileSync(dockerfilePath, "utf8");
+    const preserveEnvMatch = dockerfile.match(/"(--preserve-env=[^"]+)"/);
+    expect(preserveEnvMatch).not.toBeNull();
+
+    const preserveEnvValue = preserveEnvMatch?.[1]?.slice("--preserve-env=".length) ?? "";
+    const dockerKeys = preserveEnvValue.split(",").sort();
+    const manifestKeys = [...COMPOSE_WIRED_AT_DEPLOY].sort();
+
+    expect(dockerKeys).toEqual(manifestKeys);
+  });
 });
 
 describe("api health schema", () => {

@@ -22,7 +22,8 @@ RUN wget -q -t3 'https://packages.doppler.com/public/cli/rsa.8004D9FF50437357.ke
 COPY --from=builder --chown=bun:bun /app/apps/api/dist ./dist
 USER bun
 EXPOSE 3001
-CMD ["doppler", "run", "--", "bun", "dist/index.js"]
+# only compose-owned per-deployment values beat Doppler; Doppler-owned keys like APP_ENV are not shadowed by compose defaults.
+CMD ["doppler", "run", "--preserve-env=DB_URL,REDIS_URL,API_CORS_ORIGIN,BETTER_AUTH_URL,NEXT_PUBLIC_APP_URL,NEXT_PUBLIC_API_URL", "--", "bun", "dist/index.js"]
 
 FROM builder AS migrate
 WORKDIR /app/packages/db
