@@ -8,7 +8,7 @@ export const authConfigSchema = z.object({
   trustedOrigins: z.array(z.string().url()).min(1),
   githubClientId: z.string().optional(),
   githubClientSecret: z.string().optional(),
-  enableEmailPassword: z.boolean().default(true),
+  enableEmailPassword: z.boolean().default(false),
 });
 
 export type AuthConfig = z.infer<typeof authConfigSchema>;

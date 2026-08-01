@@ -21,8 +21,8 @@ Position above booking layer per [competitor research](../research/competitor-la
 
 ## Auth
 
-- **Now:** Better Auth with **GitHub OAuth** and **email/password**.
-- **Later:** Google OAuth as an additional social provider.
+- **Now:** Better Auth with **GitHub OAuth** only.
+- **Later:** Google OAuth when email/password path is dropped.
 - Signup: **nickname** (public), **full name** (private), privacy notice.
 - No username-for-auth; nickname is the public game identity.
 
