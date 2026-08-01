@@ -1,3 +1,4 @@
+import { inferAdditionalFields } from "better-auth/client/plugins";
 import { organizationClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 
@@ -5,7 +6,14 @@ import { createAuthClient } from "better-auth/react";
 export function createPadelskiAuthClient(apiPublicUrl: string) {
   return createAuthClient({
     baseURL: `${apiPublicUrl.replace(/\/$/, "")}/v1/auth`,
-    plugins: [organizationClient()],
+    plugins: [
+      organizationClient(),
+      inferAdditionalFields({
+        user: {
+          nickname: { type: "string", required: false },
+        },
+      }),
+    ],
   });
 }
 

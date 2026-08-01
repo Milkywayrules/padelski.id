@@ -4,6 +4,7 @@ import { createAuth } from "@padelski/auth";
 import { serverEnv } from "@padelski/env/server";
 import { Elysia } from "elysia";
 import { z } from "zod";
+import { getDb } from "./db";
 import {
   configRoutes,
   matchRoutes,
@@ -35,15 +36,22 @@ function createAuthInstance() {
   const githubClientSecret = skipValidation
     ? process.env["OAUTH_GITHUB_CLIENT_SECRET"]
     : serverEnv.OAUTH_GITHUB_CLIENT_SECRET;
+  const resendApiKey = skipValidation ? process.env["RESEND_API_KEY"] : serverEnv.RESEND_API_KEY;
+  const emailFrom = skipValidation ? process.env["EMAIL_FROM"] : serverEnv.EMAIL_FROM;
 
-  return createAuth({
-    secret: skipValidation ? secret : serverEnv.BETTER_AUTH_SECRET,
-    baseURL: `${skipValidation ? apiPublicUrl : serverEnv.BETTER_AUTH_URL}/v1/auth`,
-    trustedOrigins: [skipValidation ? corsOrigin : serverEnv.API_CORS_ORIGIN],
-    githubClientId,
-    githubClientSecret,
-    enableEmailPassword: true,
-  });
+  return createAuth(
+    {
+      secret: skipValidation ? secret : serverEnv.BETTER_AUTH_SECRET,
+      baseURL: `${skipValidation ? apiPublicUrl : serverEnv.BETTER_AUTH_URL}/v1/auth`,
+      trustedOrigins: [skipValidation ? corsOrigin : serverEnv.API_CORS_ORIGIN],
+      githubClientId,
+      githubClientSecret,
+      enableEmailPassword: true,
+      resendApiKey,
+      emailFrom,
+    },
+    getDb(),
+  );
 }
 
 export function createApp() {

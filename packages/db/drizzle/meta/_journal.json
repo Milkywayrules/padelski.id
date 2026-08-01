@@ -8,6 +8,13 @@
       "when": 1785460840245,
       "tag": "0000_solid_wrecker",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1785460840246,
+      "tag": "0001_better_auth",
+      "breakpoints": true
     }
   ]
 }
