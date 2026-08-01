@@ -14,14 +14,29 @@ fi
 
 require_doppler_validate "$ROOT"
 
+COOLIFY_PROXY_NETWORK="${COOLIFY_PROXY_NETWORK:-coolify}"
+
+compose_config_text() {
+  local compose="$1"
+  docker compose -f "$compose" config 2>/dev/null || true
+}
+
 discover_api_web_services() {
   local compose="$1"
   local services=""
 
   services="$(
-    docker compose -f "$compose" config --services 2>/dev/null \
-      | grep -E '^(api|web)(-pr-[0-9]+)?$' || true
+    compose_config_text "$compose" \
+      | grep -E '^  (api|web)(-pr-[0-9]+)?:$' \
+      | sed 's/^  //;s/:$//' || true
   )"
+
+  if [[ -z "$services" ]]; then
+    services="$(
+      docker compose -f "$compose" config --services 2>/dev/null \
+        | grep -E '^(api|web)(-pr-[0-9]+)?$' || true
+    )"
+  fi
 
   if [[ -z "$services" ]]; then
     services="$(
@@ -43,16 +58,17 @@ router_port_for_id() {
 }
 
 collect_traefik_router_ids() {
-  local compose="$1"
-  grep -oE 'traefik\.http\.routers\.((http|https)-0-[^.]+)\.' "$compose" 2>/dev/null \
+  local config_text="$1"
+  printf '%s\n' "$config_text" \
+    | grep -oE 'traefik\.http\.routers\.((http|https)-0-[^.]+)\.' \
     | sed 's/traefik\.http\.routers\.//;s/\.$//' \
     | sort -u || true
 }
 
 label_present() {
-  local compose="$1"
+  local config_text="$1"
   local needle="$2"
-  grep -Fq "$needle" "$compose" 2>/dev/null
+  grep -Fq "$needle" <<< "$config_text"
 }
 
 service_for_router() {
@@ -71,6 +87,7 @@ service_for_router() {
 write_coolify_override() {
   local compose="$ROOT/docker-compose.yml"
   local override="$ROOT/docker-compose.override.yml"
+  local merged_config=""
   local services=""
   local router_ids=""
   local patched=0
@@ -80,6 +97,7 @@ write_coolify_override() {
     exit 1
   fi
 
+  merged_config="$(compose_config_text "$compose")"
   services="$(discover_api_web_services "$compose")"
 
   if [[ -z "$services" ]]; then
@@ -89,7 +107,7 @@ write_coolify_override() {
   fi
 
   declare -A label_lines=()
-  router_ids="$(collect_traefik_router_ids "$compose")"
+  router_ids="$(collect_traefik_router_ids "$merged_config")"
   while IFS= read -r router_id; do
     [[ -z "$router_id" ]] && continue
 
@@ -103,15 +121,24 @@ write_coolify_override() {
     service_label="traefik.http.services.${router_id}.loadbalancer.server.port=${port}"
     router_service_label="traefik.http.routers.${router_id}.service=${router_id}"
 
-    if ! label_present "$compose" "$service_label"; then
+    if ! label_present "$merged_config" "$service_label"; then
       label_lines["$target_svc"]+=$'\n'"      - ${service_label}"
       patched=$((patched + 1))
     fi
-    if ! label_present "$compose" "traefik.http.routers.${router_id}.service="; then
+    if ! label_present "$merged_config" "traefik.http.routers.${router_id}.service="; then
       label_lines["$target_svc"]+=$'\n'"      - ${router_service_label}"
       patched=$((patched + 1))
     fi
   done <<< "$router_ids"
+
+  while IFS= read -r svc; do
+    [[ -z "$svc" ]] && continue
+    local network_label="traefik.docker.network=${COOLIFY_PROXY_NETWORK}"
+    if ! label_present "$merged_config" "$network_label"; then
+      label_lines["$svc"]+=$'\n'"      - ${network_label}"
+      patched=$((patched + 1))
+    fi
+  done <<< "$services"
 
   {
     echo "services:"

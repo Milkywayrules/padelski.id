@@ -10,6 +10,7 @@ CONFIG_URL="${SMOKE_CONFIG_URL:-http://127.0.0.1:3001/v1/config}"
 MAX_ATTEMPTS="${SMOKE_MAX_ATTEMPTS:-30}"
 SLEEP_SECS="${SMOKE_SLEEP_SECS:-2}"
 SMOKE_MODE="${SMOKE_MODE:-auto}"
+SMOKE_PUBLIC_URLS="${SMOKE_PUBLIC_URLS:-auto}"
 
 discover_service() {
   local base="$1"
@@ -110,6 +111,74 @@ wait_for() {
   return 1
 }
 
+public_url_enabled() {
+  case "$SMOKE_PUBLIC_URLS" in
+    always) return 0 ;;
+    never) return 1 ;;
+    auto)
+      [[ -n "${SERVICE_URL_API_3001:-}" || -n "${SERVICE_URL_WEB_3000:-}" ]]
+      ;;
+    *)
+      echo "smoke failed: unknown SMOKE_PUBLIC_URLS=$SMOKE_PUBLIC_URLS" >&2
+      return 1
+      ;;
+  esac
+}
+
+join_url() {
+  local base="${1%/}"
+  local path="$2"
+  if [[ "$path" == /* ]]; then
+    printf '%s%s' "$base" "$path"
+  else
+    printf '%s/%s' "$base" "$path"
+  fi
+}
+
+wait_for_public() {
+  local url="$1"
+  local label="$2"
+  local attempt=1
+
+  while (( attempt <= MAX_ATTEMPTS )); do
+    if curl -fsS --connect-timeout 3 --max-time 10 "$url" >/dev/null 2>&1; then
+      echo "smoke ok: $label ($url via public)"
+      return 0
+    fi
+
+    echo "smoke wait: $label attempt $attempt/$MAX_ATTEMPTS (public)"
+    sleep "$SLEEP_SECS"
+    attempt=$((attempt + 1))
+  done
+
+  echo "smoke failed: $label ($url via public)" >&2
+  return 1
+}
+
+check_public_urls() {
+  if ! public_url_enabled; then
+    echo "smoke public: skipped (SMOKE_PUBLIC_URLS=$SMOKE_PUBLIC_URLS)"
+    return 0
+  fi
+
+  if ! command -v curl >/dev/null 2>&1; then
+    echo "error: required command not found: curl (public URL smoke)" >&2
+    return 1
+  fi
+
+  echo "smoke public: enabled"
+
+  if [[ -n "${SERVICE_URL_API_3001:-}" || -n "${SMOKE_PUBLIC_API_URL:-}" ]]; then
+    local api_public="${SMOKE_PUBLIC_API_URL:-$(join_url "${SERVICE_URL_API_3001:-}" /v1/health)}"
+    wait_for_public "$api_public" "api health public"
+  fi
+
+  if [[ -n "${SERVICE_URL_WEB_3000:-}" || -n "${SMOKE_PUBLIC_WEB_URL:-}" ]]; then
+    local web_public="${SMOKE_PUBLIC_WEB_URL:-$(join_url "${SERVICE_URL_WEB_3000:-}" /)}"
+    wait_for_public "$web_public" "web root public"
+  fi
+}
+
 MODE="$(resolve_smoke_mode)"
 echo "smoke mode: $MODE"
 
@@ -130,5 +199,7 @@ fi
 wait_for "$API_URL" "api health" "$API_SERVICE" "$MODE"
 wait_for "$CONFIG_URL" "api config" "$API_SERVICE" "$MODE"
 wait_for "$WEB_URL" "web root" "$WEB_SERVICE" "$MODE"
+
+check_public_urls
 
 echo "smoke: all checks passed"
