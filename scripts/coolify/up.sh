@@ -14,20 +14,10 @@ fi
 
 require_doppler_validate "$ROOT"
 
-# Coolify regenerates deploy compose and injects shared 127.0.0.1:3000/3001 host binds
-# from domain UI config — repo-level `ports: !reset []` is not preserved. Merge a runtime
-# override so main + concurrent PR previews start without host port collisions.
-write_port_strip_override() {
-  local compose="$ROOT/docker-compose.yml"
-  local override="$ROOT/docker-compose.override.yml"
+discover_api_web_services() {
+  local compose="$1"
   local services=""
 
-  if [[ ! -f "$compose" ]]; then
-    echo "error: docker-compose.yml not found at $compose" >&2
-    exit 1
-  fi
-
-  # Prefer parsed service names — Coolify may rename api/web to api-pr-N in the deploy artifact.
   services="$(
     docker compose -f "$compose" config --services 2>/dev/null \
       | grep -E '^(api|web)(-pr-[0-9]+)?$' || true
@@ -40,24 +30,108 @@ write_port_strip_override() {
     )"
   fi
 
+  printf '%s' "$services"
+}
+
+router_port_for_id() {
+  local router_id="$1"
+  case "$router_id" in
+    *web*) echo 3000 ;;
+    *api*) echo 3001 ;;
+    *) echo "" ;;
+  esac
+}
+
+collect_traefik_router_ids() {
+  local compose="$1"
+  grep -oE 'traefik\.http\.routers\.((http|https)-0-[^.]+)\.' "$compose" 2>/dev/null \
+    | sed 's/traefik\.http\.routers\.//;s/\.$//' \
+    | sort -u || true
+}
+
+label_present() {
+  local compose="$1"
+  local needle="$2"
+  grep -Fq "$needle" "$compose" 2>/dev/null
+}
+
+service_for_router() {
+  local router_id="$1"
+  local services="$2"
+  case "$router_id" in
+    *web*) printf '%s\n' "$services" | grep -E '^web(-pr-[0-9]+)?$' | head -1 || true ;;
+    *api*) printf '%s\n' "$services" | grep -E '^api(-pr-[0-9]+)?$' | head -1 || true ;;
+    *) echo "" ;;
+  esac
+}
+
+# Coolify regenerates deploy compose and injects shared 127.0.0.1:3000/3001 host binds
+# from domain UI config — repo-level `ports: !reset []` is not preserved. Preview deploys
+# also omit traefik loadbalancer.server.port labels (coolify#6832). Merge a runtime override.
+write_coolify_override() {
+  local compose="$ROOT/docker-compose.yml"
+  local override="$ROOT/docker-compose.override.yml"
+  local services=""
+  local router_ids=""
+  local patched=0
+
+  if [[ ! -f "$compose" ]]; then
+    echo "error: docker-compose.yml not found at $compose" >&2
+    exit 1
+  fi
+
+  services="$(discover_api_web_services "$compose")"
+
   if [[ -z "$services" ]]; then
-    echo "warn: no api/web compose services — skipping port-strip override" >&2
+    echo "warn: no api/web compose services — skipping coolify override" >&2
     rm -f "$override"
     return 0
   fi
+
+  declare -A label_lines=()
+  router_ids="$(collect_traefik_router_ids "$compose")"
+  while IFS= read -r router_id; do
+    [[ -z "$router_id" ]] && continue
+
+    local port target_svc service_label router_service_label
+    port="$(router_port_for_id "$router_id")"
+    [[ -z "$port" ]] && continue
+
+    target_svc="$(service_for_router "$router_id" "$services")"
+    [[ -z "$target_svc" ]] && continue
+
+    service_label="traefik.http.services.${router_id}.loadbalancer.server.port=${port}"
+    router_service_label="traefik.http.routers.${router_id}.service=${router_id}"
+
+    if ! label_present "$compose" "$service_label"; then
+      label_lines["$target_svc"]+=$'\n'"      - ${service_label}"
+      patched=$((patched + 1))
+    fi
+    if ! label_present "$compose" "traefik.http.routers.${router_id}.service="; then
+      label_lines["$target_svc"]+=$'\n'"      - ${router_service_label}"
+      patched=$((patched + 1))
+    fi
+  done <<< "$router_ids"
 
   {
     echo "services:"
     while IFS= read -r svc; do
       [[ -z "$svc" ]] && continue
       printf '  %s:\n    ports: !reset []\n' "$svc"
+      if [[ -n "${label_lines[$svc]:-}" ]]; then
+        echo "    labels:"
+        printf '%s\n' "${label_lines[$svc]}" | sed '/^$/d'
+      fi
     done <<< "$services"
   } > "$override"
 
   echo "port-strip override for:$(printf ' %s' $services)"
+  if (( patched > 0 )); then
+    echo "traefik port labels patched: ${patched}"
+  fi
 }
 
-write_port_strip_override
+write_coolify_override
 
 doppler_run docker compose up -d --wait --remove-orphans "$@"
 bash "$ROOT/scripts/coolify/smoke.sh"
