@@ -9,6 +9,7 @@ export {
   verification,
 } from "./auth";
 export { auditFields, type AuditFields } from "./audit";
+export { organizations } from "./legacy";
 export { players } from "./player";
 export {
   playSessionStatusEnum,
