@@ -4,12 +4,13 @@
 
 x-doppler-api-env: &doppler-api-env
   APP_ENV: ${APP_ENV}
-  API_CORS_ORIGIN: ${API_CORS_ORIGIN}
+  # Doppler SoT for main deploy; Coolify SERVICE_URL_* for per-PR preview domains.
+  API_CORS_ORIGIN: ${API_CORS_ORIGIN:-${SERVICE_URL_WEB_3000}}
   BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
-  BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+  BETTER_AUTH_URL: ${BETTER_AUTH_URL:-${SERVICE_URL_API_3001}}
   EMAIL_FROM: ${EMAIL_FROM}
-  NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL}
-  NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+  NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-${SERVICE_URL_WEB_3000}}
+  NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-${SERVICE_URL_API_3001}}
   OAUTH_GITHUB_CLIENT_ID: ${OAUTH_GITHUB_CLIENT_ID}
   OAUTH_GITHUB_CLIENT_SECRET: ${OAUTH_GITHUB_CLIENT_SECRET}
   RESEND_API_KEY: ${RESEND_API_KEY}
@@ -17,8 +18,8 @@ x-doppler-api-env: &doppler-api-env
   NODE_ENV: production
 
 x-doppler-web-env: &doppler-web-env
-  NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL}
-  NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+  NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-${SERVICE_URL_WEB_3000}}
+  NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-${SERVICE_URL_API_3001}}
   NODE_ENV: production
   PORT: "3000"
   HOSTNAME: "0.0.0.0"
@@ -79,8 +80,9 @@ services:
       dockerfile: apps/api/Dockerfile
     restart: unless-stopped
     <<: *app-hardening
-    ports:
-      - "127.0.0.1:3001:3001"
+    # No host ports — Coolify proxy routes by domain; fixed loopback ports break concurrent PR previews.
+    expose:
+      - "3001"
     environment:
       <<: *doppler-api-env
       PORT: "3001"
@@ -113,15 +115,15 @@ services:
       context: .
       dockerfile: apps/web/Dockerfile
       args:
-        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL}
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-${SERVICE_URL_WEB_3000}}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-${SERVICE_URL_API_3001}}
     restart: unless-stopped
     <<: *app-hardening
     tmpfs:
       - /tmp
       - /app/apps/web/.next/cache:uid=1000,gid=1000,mode=0755
-    ports:
-      - "127.0.0.1:3000:3000"
+    expose:
+      - "3000"
     environment:
       <<: *doppler-web-env
     depends_on:

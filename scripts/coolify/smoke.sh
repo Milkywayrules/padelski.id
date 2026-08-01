@@ -17,7 +17,7 @@ resolve_smoke_mode() {
     return
   fi
 
-  # Host loopback works when smoke runs on the same machine as published ports (local dev).
+  # Loopback works only when api/web publish host ports (optional local override); Coolify uses compose-exec.
   if curl -fsS --connect-timeout 2 --max-time 3 "$API_URL" >/dev/null 2>&1; then
     echo "loopback"
     return
