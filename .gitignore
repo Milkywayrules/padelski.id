@@ -17,4 +17,5 @@ playwright-report/
 test-results/
 *.tsbuildinfo
 .env
+docker-compose.coolify-runtime.yml
 .doppler.yaml
