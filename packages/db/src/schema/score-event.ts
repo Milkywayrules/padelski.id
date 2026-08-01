@@ -11,6 +11,7 @@ export const scoreEventActionEnum = pgEnum("score_event_action", [
 
 export const scoreEventTeamEnum = pgEnum("score_event_team", ["A", "B"]);
 
+/** Score events keep actorSlotId for slot-scoped actions; createdBy/updatedBy stay nullable for system writes. */
 export const scoreEvents = pgTable(
   "score_events",
   {

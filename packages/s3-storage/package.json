@@ -1,5 +1,5 @@
 {
-  "name": "@padelski/auth",
+  "name": "@padelski/s3-storage",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -7,18 +7,6 @@
     ".": {
       "types": "./src/index.ts",
       "default": "./src/index.ts"
-    },
-    "./client": {
-      "types": "./src/client.ts",
-      "default": "./src/client.ts"
-    },
-    "./server": {
-      "types": "./src/server.ts",
-      "default": "./src/server.ts"
-    },
-    "./abilities": {
-      "types": "./src/abilities.ts",
-      "default": "./src/abilities.ts"
     }
   },
   "scripts": {
@@ -27,9 +15,6 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@padelski/env": "workspace:*",
-    "@casl/ability": "^6.7.3",
-    "better-auth": "^1.2.8",
     "zod": "^3.25.28"
   },
   "devDependencies": {

@@ -1,6 +1,7 @@
 import { z } from "zod";
+import { WS_PROTOCOL_VERSION } from "./version";
 
-export const WS_PROTOCOL_VERSION = "v1" as const;
+export { WS_PROTOCOL_VERSION } from "./version";
 
 export const wsEnvelopeSchema = z.object({
   v: z.literal(WS_PROTOCOL_VERSION),
@@ -75,3 +76,5 @@ export const matchScoreSnapshotMessageSchema = wsEnvelopeSchema.extend({
 });
 
 export type MatchScoreSnapshotMessage = z.infer<typeof matchScoreSnapshotMessageSchema>;
+
+export { REDIS_CHANNEL_PREFIX, redisSessionChannel } from "./redis-channels";

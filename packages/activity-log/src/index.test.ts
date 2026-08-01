@@ -9,9 +9,11 @@ describe("activity-log stub", () => {
       actorId: "00000000-0000-4000-8000-000000000001",
       subjectType: "PlaySession",
       subjectId: "00000000-0000-4000-8000-000000000002",
+      playSessionId: "00000000-0000-4000-8000-000000000002",
     });
 
     expect(entry.action).toBe("play_session.created");
+    expect(entry.playSessionId).toBe("00000000-0000-4000-8000-000000000002");
     expect(entry.id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
   });
 });
