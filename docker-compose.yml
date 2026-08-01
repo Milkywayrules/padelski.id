@@ -1,27 +1,8 @@
-# Pattern A: host env from `doppler run` reaches containers only via explicit `environment:` entries.
-# Validation: `doppler:validate` + t3-env at runtime — no compose error-message fallbacks.
+# Compose is the single source of truth for Coolify's Docker Compose build pack.
+# Domains are assigned per service in the Coolify UI as https://host:PORT — never via `ports:`,
+# which binds a global host port and collides across concurrent PR previews.
+# No custom networks: Coolify creates the stack network and only Traefik-reachable IPs route.
 # See docs/adr/0002-deploy-secrets-doppler-coolify.md
-
-x-doppler-api-env: &doppler-api-env
-  APP_ENV: ${APP_ENV}
-  API_CORS_ORIGIN: ${API_CORS_ORIGIN}
-  BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
-  BETTER_AUTH_URL: ${BETTER_AUTH_URL}
-  EMAIL_FROM: ${EMAIL_FROM}
-  NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL}
-  NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
-  OAUTH_GITHUB_CLIENT_ID: ${OAUTH_GITHUB_CLIENT_ID}
-  OAUTH_GITHUB_CLIENT_SECRET: ${OAUTH_GITHUB_CLIENT_SECRET}
-  RESEND_API_KEY: ${RESEND_API_KEY}
-  OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT}
-  NODE_ENV: production
-
-x-doppler-web-env: &doppler-web-env
-  NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL}
-  NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
-  NODE_ENV: production
-  PORT: "3000"
-  HOSTNAME: "0.0.0.0"
 
 x-app-hardening: &app-hardening
   init: true
@@ -42,14 +23,10 @@ services:
       - no-new-privileges:true
     environment:
       POSTGRES_USER: padelski
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${SERVICE_PASSWORD_POSTGRES}
       POSTGRES_DB: padelski
-    expose:
-      - "5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      - datastore
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U padelski -d padelski"]
       interval: 5s
@@ -63,10 +40,6 @@ services:
       - no-new-privileges:true
     # Cache-only until app code uses Redis for durable state (redis.io persistence docs).
     command: ["redis-server", "--save", "", "--appendonly", "no"]
-    expose:
-      - "6379"
-    networks:
-      - datastore
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -79,17 +52,22 @@ services:
       dockerfile: apps/api/Dockerfile
     restart: unless-stopped
     <<: *app-hardening
-    ports:
-      - "127.0.0.1:3001:3001"
     environment:
-      <<: *doppler-api-env
+      # Only the Doppler service token is stored in Coolify; the CLI fetches the rest at start.
+      DOPPLER_TOKEN: ${DOPPLER_TOKEN:?}
+      # read_only rootfs: the Doppler CLI needs a writable config dir (docs.doppler.com/docs/dockerfile).
+      DOPPLER_CONFIG_DIR: /tmp/.doppler
+      NODE_ENV: production
+      APP_ENV: ${APP_ENV:-production}
       PORT: "3001"
-      DB_URL: postgresql://padelski:${POSTGRES_PASSWORD}@postgres:5432/padelski
+      DB_URL: postgresql://padelski:${SERVICE_PASSWORD_POSTGRES}@postgres:5432/padelski
       REDIS_URL: redis://redis:6379
       OTEL_SERVICE_NAME: padelski-api
-    networks:
-      - default
-      - datastore
+      # Per-deployment URLs: each PR preview gets a generated subdomain no secret store can know.
+      NEXT_PUBLIC_API_URL: ${SERVICE_URL_API_3001}
+      NEXT_PUBLIC_APP_URL: ${SERVICE_URL_WEB_3000}
+      BETTER_AUTH_URL: ${SERVICE_URL_API_3001}
+      API_CORS_ORIGIN: ${SERVICE_URL_WEB_3000}
     depends_on:
       postgres:
         condition: service_healthy
@@ -113,17 +91,19 @@ services:
       context: .
       dockerfile: apps/web/Dockerfile
       args:
-        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL}
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_APP_URL: ${SERVICE_URL_WEB_3000}
+        NEXT_PUBLIC_API_URL: ${SERVICE_URL_API_3001}
     restart: unless-stopped
     <<: *app-hardening
     tmpfs:
       - /tmp
       - /app/apps/web/.next/cache:uid=1000,gid=1000,mode=0755
-    ports:
-      - "127.0.0.1:3000:3000"
     environment:
-      <<: *doppler-web-env
+      NODE_ENV: production
+      PORT: "3000"
+      HOSTNAME: "0.0.0.0"
+      NEXT_PUBLIC_API_URL: ${SERVICE_URL_API_3001}
+      NEXT_PUBLIC_APP_URL: ${SERVICE_URL_WEB_3000}
     depends_on:
       api:
         condition: service_healthy
@@ -139,10 +119,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
-
-networks:
-  datastore:
-    internal: true
 
 volumes:
   postgres_data:

@@ -1,6 +1,6 @@
 import { type SpawnSyncOptionsWithStringEncoding, spawnSync } from "node:child_process";
 
-/** Set by scripts/coolify/ensure-doppler.sh — e.g. "doppler" or "bunx doppler". */
+/** Optional local dev override for Doppler CLI invocation — defaults to `doppler` on PATH; `bunx doppler` is valid. */
 export function resolveDopplerInvocation(): { command: string; prefixArgs: string[] } {
   const fromEnv = process.env["PADELSKI_DOPPLER_CMD"]?.trim();
   if (fromEnv) {

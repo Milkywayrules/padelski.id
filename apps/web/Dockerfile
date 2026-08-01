@@ -2,31 +2,15 @@
 FROM oven/bun:1.3.14-alpine AS base
 WORKDIR /app
 
-FROM base AS deps
-COPY package.json bun.lock turbo.json ./
-COPY apps/api/package.json ./apps/api/
-COPY apps/web/package.json ./apps/web/
-COPY packages/activity-log/package.json ./packages/activity-log/
-COPY packages/auth/package.json ./packages/auth/
-COPY packages/config/package.json ./packages/config/
-COPY packages/db/package.json ./packages/db/
-COPY packages/domain/package.json ./packages/domain/
-COPY packages/email/package.json ./packages/email/
-COPY packages/env/package.json ./packages/env/
-COPY packages/ui/package.json ./packages/ui/
-COPY packages/ws-protocol/package.json ./packages/ws-protocol/
+FROM base AS builder
+COPY . .
 # Skip root "prepare" (lefthook/git hooks) — git is absent in Alpine.
 RUN --mount=type=cache,target=/root/.bun/install/cache \
     bun install --frozen-lockfile --ignore-scripts
-
-FROM base AS builder
-COPY . .
-COPY --from=deps /app/node_modules ./node_modules
-RUN rm -rf apps/*/node_modules packages/*/node_modules && \
-    bun install --frozen-lockfile --ignore-scripts
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
-# Interim: public URLs cross Docker build boundary until /v1/config client bootstrap (ADR-0002).
+# Next.js inlines NEXT_PUBLIC_* into the client bundle at build time, so Coolify
+# passes the per-deployment URLs as build args.
 ARG NEXT_PUBLIC_APP_URL
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
@@ -43,7 +27,7 @@ WORKDIR /app
 COPY --from=builder --chown=bun:bun /app/apps/web/.next/standalone ./
 COPY --from=builder --chown=bun:bun /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder --chown=bun:bun /app/apps/web/public ./apps/web/public
-# Writable mount point for runtime cache when compose uses read_only + tmpfs (Docker Next.js guide).
+# Writable mount point for runtime cache when compose uses read_only + tmpfs.
 RUN mkdir -p apps/web/.next/cache && chown -R bun:bun apps/web/.next
 USER bun
 EXPOSE 3000
